@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ENGL 470 · Discussion and Debate — Interactive Course</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=Cairo:wght@500;700;900&display=swap">
+<style>
+:root{
+  --bg:#F8F9FB;--surface:#FFFFFF;--ink:#0A0A0A;--mute:#3B4457;--soft:#E9ECF2;
+  --slab:#0B1F3F;--slab-ink:#F8F9FB;--maroon:#6A1226;--on-maroon:#FFFFFF;--accent:#6A1226;
+  --border:#0A0A0A;--shadow:#0B1F3F;--navy:#0B1F3F;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#08122A;--surface:#0E1D3B;--ink:#F4F6FA;--mute:#B7C0D3;--soft:#16274A;
+    --slab:#1B3A70;--slab-ink:#FFFFFF;--maroon:#8F2238;--on-maroon:#FFFFFF;--accent:#F0A3B2;
+    --border:#F4F6FA;--shadow:#8F2238;--navy:#1B3A70;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#08122A;--surface:#0E1D3B;--ink:#F4F6FA;--mute:#B7C0D3;--soft:#16274A;
+  --slab:#1B3A70;--slab-ink:#FFFFFF;--maroon:#8F2238;--on-maroon:#FFFFFF;--accent:#F0A3B2;
+  --border:#F4F6FA;--shadow:#8F2238;--navy:#1B3A70;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:calc(env(safe-area-inset-top,0px) + var(--hh,90px))}
+body{background:var(--bg);color:var(--ink);font-family:'Archivo',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;font-size:clamp(18px,1.45vw,23px);line-height:1.45;min-height:100vh}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:inherit}
+input{font:inherit;color:inherit}
+:focus-visible{outline:4px solid var(--accent);outline-offset:3px}
+.ico{flex:none;display:inline-block;vertical-align:middle}
+[dir="rtl"],.ar{font-family:'Cairo','Archivo',system-ui,sans-serif}
+
+/* ---------- top bar ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:10px clamp(12px,2vw,28px);background:var(--bg);border-bottom:5px solid var(--border)}
+.brand{display:flex;align-items:center;gap:14px;font-weight:900;font-size:1.5em;letter-spacing:-.02em;line-height:1}
+.brand .mark{width:46px;height:46px;background:var(--slab);color:var(--slab-ink);display:grid;place-items:center;border:3px solid var(--border);box-shadow:5px 5px 0 var(--maroon)}
+.brand small{display:block;font-size:.5em;font-weight:600;letter-spacing:0;color:var(--mute);margin-top:4px}
+.modes{display:flex;gap:10px;flex-wrap:wrap}
+.mode{display:flex;align-items:center;gap:8px;padding:9px 13px;border:3px solid var(--border);font-weight:800;font-size:.95em;background:var(--surface)}
+.mode[aria-selected="true"]{background:var(--slab);color:var(--slab-ink);box-shadow:5px 5px 0 var(--maroon)}
+.tools{margin-left:auto;display:flex;gap:10px;align-items:center}
+.ib{width:48px;height:48px;display:grid;place-items:center;border:3px solid var(--border);background:var(--surface)}
+.ib:hover{background:var(--maroon);color:var(--on-maroon)}
+.ib[aria-pressed="true"]{background:var(--maroon);color:var(--on-maroon)}
+.ib .sun{display:none}
+:root[data-theme="dark"] .ib .sun{display:block}
+:root[data-theme="dark"] .ib .moon{display:none}
+
+/* ---------- lectures layout ---------- */
+.lec{display:grid;grid-template-columns:minmax(250px,320px) minmax(0,1fr);min-height:calc(100vh - var(--hh,92px))}
+.side{border-right:5px solid var(--border);padding:18px 14px 40px;display:flex;flex-direction:column;gap:10px;position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--hh,86px));align-self:start;max-height:calc(100vh - var(--hh,92px) - 8px);overflow:auto}
+.li{display:grid;grid-template-columns:52px 1fr;gap:10px;align-items:center;padding:10px 12px;border:3px solid transparent;font-weight:800;line-height:1.15}
+.li .n{font-size:1.9em;font-weight:900;color:var(--accent);text-align:center;letter-spacing:-.03em}
+.li small{display:block;font-weight:600;color:var(--mute);font-size:.72em;margin-top:3px}
+.li:hover{border-color:var(--border)}
+.li[aria-current="true"]{background:var(--slab);color:var(--slab-ink);border-color:var(--border);box-shadow:6px 6px 0 var(--maroon)}
+.li[aria-current="true"] .n{color:var(--slab-ink)}
+.li[aria-current="true"] small{color:var(--slab-ink);opacity:.8}
+.stage{padding:clamp(18px,3.5vw,56px);min-width:0}
+.slidehead{display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+.kick{font-weight:800;color:var(--accent);font-size:.9em}
+.slidehead h2{font-size:clamp(2.1rem,4.6vw,4.2rem);line-height:.98;font-weight:900;letter-spacing:-.03em;flex-basis:100%}
+.slide{animation:in .28s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.nav{display:flex;align-items:center;gap:18px;margin-top:38px;flex-wrap:wrap;position:sticky;bottom:env(safe-area-inset-bottom,0px);z-index:6;background:var(--bg);padding:12px 0;border-top:4px solid var(--border)}
+.nb{width:64px;height:64px;display:grid;place-items:center;border:3px solid var(--border);background:var(--surface);box-shadow:5px 5px 0 var(--slab)}
+.nb:hover:not(:disabled){background:var(--maroon);color:var(--on-maroon)}
+.nb:disabled{opacity:.3;cursor:default;box-shadow:none}
+.dots{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+.dot{width:26px;height:14px;border:3px solid var(--border);background:var(--surface)}
+.dot.seen{background:var(--soft)}
+.dot.on{background:var(--maroon);width:52px}
+.count{font-weight:900;font-size:1.1em}
+
+/* ---------- content blocks ---------- */
+.hero{display:grid;grid-template-columns:auto 1fr;gap:clamp(18px,3vw,48px);align-items:center;margin-bottom:26px}
+.bignum{font-size:clamp(7rem,20vw,17rem);line-height:.8;font-weight:900;color:var(--maroon);letter-spacing:-.06em}
+:root[data-theme="dark"] .bignum{color:var(--accent)}
+.hero h1{font-size:clamp(2.6rem,6.4vw,6rem);line-height:.95;font-weight:900;letter-spacing:-.04em}
+.sub{font-size:1.25em;color:var(--mute);margin-top:14px;font-weight:600;max-width:34ch}
+.slab{background:var(--slab);color:var(--slab-ink);border:3px solid var(--border);padding:1em 1.3em}
+.objs{list-style:none;padding:1.1em 1.4em;display:grid;gap:.6em;font-weight:700;font-size:1.15em}
+.objs li{display:flex;gap:14px;align-items:flex-start}
+.objs li::before{content:"";width:14px;height:14px;background:var(--on-maroon);border:3px solid var(--maroon);margin-top:.5em;flex:none;background:#fff;box-shadow:3px 3px 0 var(--maroon)}
+.lead{font-size:1.45em;font-weight:700;line-height:1.3;max-width:34ch}
+.lead.wide{max-width:none}
+.big{font-size:clamp(3rem,8vw,7rem);font-weight:900;line-height:.9;letter-spacing:-.04em}
+.card{border:3px solid var(--border);background:var(--surface);padding:1em 1.2em}
+.card h3,.slab h3{font-size:1.25em;font-weight:900;line-height:1.1;margin-bottom:.35em}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))}
+.stack{display:grid;gap:20px}
+.note{color:var(--mute);font-weight:600;font-size:.9em}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border:3px solid var(--border);background:var(--maroon);color:var(--on-maroon);font-weight:800;box-shadow:5px 5px 0 var(--slab)}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--slab)}
+mark{background:var(--maroon);color:var(--on-maroon);padding:0 .3em}
+.tag{display:inline-block;padding:2px 10px;border:3px solid var(--border);font-weight:800;font-size:.75em;background:var(--soft)}
+
+/* switch */
+.switch{width:92px;height:48px;border:3px solid var(--border);background:var(--soft);position:relative;flex:none}
+.switch i{position:absolute;top:3px;left:3px;width:36px;height:36px;background:var(--slab);border:3px solid var(--border);transition:transform .22s}
+.switch[aria-checked="true"]{background:var(--maroon)}
+.switch[aria-checked="true"] i{transform:translateX(44px);background:#fff}
+.switch.sm{width:68px;height:38px}
+.switch.sm i{width:26px;height:26px}
+.switch.sm[aria-checked="true"] i{transform:translateX(30px)}
+
+/* compare */
+.swbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.swl{font-size:clamp(1.5rem,3vw,2.5rem);font-weight:900;letter-spacing:-.03em;color:var(--mute);border-bottom:6px solid transparent;line-height:1.1}
+.swl.on{color:var(--ink);border-color:var(--maroon)}
+.cmp .rows{display:grid;gap:0;border:3px solid var(--border);background:var(--surface)}
+.cmp .row{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:18px;padding:14px 18px;align-items:baseline;border-top:3px solid var(--border)}
+.cmp .row:first-child{border-top:0}
+.cmp .row b{font-weight:900}
+.cmp .row p{font-weight:700;font-size:1.05em}
+.gauges{margin-top:22px;display:grid;gap:12px}
+.gauges h3{font-size:1.1em;font-weight:900}
+.g{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:18px;align-items:center;font-weight:800}
+.gauge{height:30px;border:3px solid var(--border);background:var(--soft)}
+.gauge i{display:block;height:100%;background:var(--slab);transition:width .55s cubic-bezier(.3,.9,.3,1)}
+.cmp[data-state="b"] .gauge i{background:var(--maroon)}
+
+/* flip cards */
+.fchead{display:flex;align-items:center;gap:12px;margin-bottom:14px;font-weight:800}
+.fc{display:flex;flex-direction:column;gap:.5em;border:3px solid var(--border);background:var(--surface);padding:1em 1.1em;min-height:110px;align-items:stretch;transition:background .2s}
+.fc:hover{box-shadow:5px 5px 0 var(--maroon)}
+.fct{display:flex;justify-content:space-between;gap:12px;font-weight:900;font-size:1.15em;line-height:1.15}
+.fcd{display:none;font-weight:600}
+.fc .eye-off{display:none}
+.fc.open{background:var(--slab);color:var(--slab-ink)}
+.fc.open .fcd{display:block}
+.fc.open .eye-on{display:none}
+.fc.open .eye-off{display:inline-block}
+
+/* tabs / stepper */
+.tablist{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.tab{padding:10px 18px;border:3px solid var(--border);font-weight:800;background:var(--surface)}
+.tab.on{background:var(--slab);color:var(--slab-ink);box-shadow:5px 5px 0 var(--maroon)}
+.panel{display:none}
+.panel.on{display:block;animation:in .25s ease-out}
+.stepper{counter-reset:s}
+.stepper .tab{counter-increment:s;display:flex;gap:10px;align-items:center}
+.stepper .tab::before{content:counter(s);display:grid;place-items:center;width:34px;height:34px;background:var(--maroon);color:var(--on-maroon);font-weight:900;border:3px solid var(--border)}
+.stepper .tab.on::before{background:#fff;color:var(--ink)}
+.stepper .panel h3{font-size:1.8em;font-weight:900;line-height:1.05;margin-bottom:.4em}
+
+/* checklist */
+.ck{display:flex;gap:14px;align-items:flex-start;padding:10px 14px;border:3px solid var(--border);background:var(--surface);font-weight:700;width:100%}
+.ck .box{width:34px;height:34px;border:3px solid var(--border);display:grid;place-items:center;flex:none;color:transparent;background:var(--bg)}
+.ck[aria-checked="true"]{background:var(--slab);color:var(--slab-ink)}
+.ck[aria-checked="true"] .box{background:var(--maroon);color:#fff}
+.meter{height:26px;border:3px solid var(--border);background:var(--soft);margin:8px 0 18px}
+.meter i{display:block;height:100%;background:var(--maroon);transition:width .4s}
+
+/* vs panels */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px}
+.vs .side2{padding:1em 1.3em;border:3px solid var(--border);font-weight:700}
+.vs .pro{background:var(--slab);color:var(--slab-ink)}
+.vs .con{background:var(--maroon);color:var(--on-maroon)}
+.vs h3{font-size:clamp(2rem,4vw,3.4rem);font-weight:900;line-height:1;letter-spacing:-.03em}
+.quote{font-size:1.35em;font-weight:800;line-height:1.3;border-left:10px solid var(--maroon);padding-left:18px}
+
+/* quiz */
+.quiz{max-width:900px}
+.qprog{height:16px;border:3px solid var(--border);background:var(--soft);margin-bottom:12px}
+.qprog i{display:block;height:100%;background:var(--maroon)}
+.qn{font-weight:800;color:var(--mute)}
+.qtext{font-size:1.5em;font-weight:800;line-height:1.25;margin:10px 0 18px}
+.opts{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))}
+.opt{padding:14px 18px;border:3px solid var(--border);font-weight:900;font-size:1.1em;background:var(--surface);text-align:center}
+.opt:hover:not(:disabled){background:var(--soft);box-shadow:5px 5px 0 var(--maroon)}
+.opt.right{background:var(--slab);color:var(--slab-ink)}
+.opt.wrong{background:var(--maroon);color:var(--on-maroon)}
+.opt:disabled{cursor:default}
+.why{margin:18px 0;padding:14px 18px;border:3px solid var(--border);background:var(--surface);font-weight:600}
+.next{margin-top:6px}
+.qres{text-align:center;padding:2em}
+
+/* sliders */
+.range{width:100%;accent-color:var(--maroon);height:34px}
+.slrow{display:grid;gap:4px;margin-bottom:16px}
+.slrow label{font-weight:900}
+.slrow .ends{display:flex;justify-content:space-between;font-weight:700;font-size:.8em;color:var(--mute)}
+.verdict{padding:1em 1.3em;border:3px solid var(--border);font-weight:900;font-size:1.3em;background:var(--surface)}
+.mtr{position:relative;height:34px;border:3px solid var(--border);background:linear-gradient(90deg,var(--maroon) 0 33%,var(--soft) 33% 66%,var(--slab) 66%);margin:12px 0}
+.mtr b{position:absolute;top:-10px;width:10px;height:50px;background:var(--ink);border:2px solid var(--bg);transition:left .35s}
+
+/* device explorer */
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.chip{padding:8px 16px;border:3px solid var(--border);font-weight:800;background:var(--surface)}
+.chip[aria-pressed="true"]{background:var(--maroon);color:var(--on-maroon);box-shadow:4px 4px 0 var(--slab)}
+.ex{font-weight:600;font-style:italic;margin-top:.4em}
+
+/* timeline / weeks */
+.weeks{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}
+.wk{padding:10px 6px;border:3px solid var(--border);font-weight:900;text-align:center;background:var(--surface);line-height:1.1}
+.wk small{display:block;font-size:.55em;font-weight:700;margin-top:4px}
+.wk.k-i{background:var(--soft)}
+.wk.k-c{background:var(--slab);color:var(--slab-ink)}
+.wk.k-d{background:var(--maroon);color:var(--on-maroon)}
+.wk.k-e{background:var(--ink);color:var(--bg)}
+.wk[aria-pressed="true"]{outline:5px solid var(--accent);outline-offset:2px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-weight:800;font-size:.85em;margin:14px 0}
+.legend span::before{content:"";display:inline-block;width:18px;height:18px;border:3px solid var(--border);margin-right:8px;vertical-align:-3px;background:var(--c)}
+
+/* donut */
+.donut{display:grid;grid-template-columns:minmax(240px,420px) 1fr;gap:26px;align-items:center}
+.donut svg{width:100%;height:auto}
+.lg{display:grid;gap:10px}
+.lgi{display:flex;align-items:center;gap:14px;padding:10px 14px;border:3px solid var(--border);font-weight:800;background:var(--surface);width:100%}
+.lgi i{width:22px;height:22px;border:3px solid var(--border);background:var(--c);flex:none}
+.lgi b{margin-left:auto;font-size:1.3em}
+.lgi[aria-pressed="true"]{background:var(--slab);color:var(--slab-ink);box-shadow:5px 5px 0 var(--maroon)}
+
+/* balance */
+.bal svg{width:100%;max-width:640px;height:auto;display:block;margin:0 auto}
+.beam{transition:transform .5s cubic-bezier(.3,1.4,.5,1);transform-origin:320px 90px}
+
+/* ---------- banks ---------- */
+.bank{padding:clamp(18px,3.5vw,56px);max-width:1500px;margin:0 auto}
+.bank h1{font-size:clamp(2.6rem,6vw,5.6rem);line-height:.95;letter-spacing:-.04em;font-weight:900;margin-bottom:10px}
+.bank .lede{font-size:1.25em;font-weight:600;color:var(--mute);max-width:50ch;margin-bottom:26px}
+.filters{display:grid;gap:14px;margin-bottom:26px;position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--hh,86px));z-index:5;background:var(--bg);padding:12px 0;border-bottom:3px solid var(--border)}
+.frow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.find{display:flex;align-items:center;gap:10px;border:3px solid var(--border);padding:8px 14px;background:var(--surface);flex:1 1 260px;min-width:0}
+.find input{border:0;background:none;outline:none;width:100%;font-weight:700}
+.seg{display:flex;border:3px solid var(--border);background:var(--surface)}
+.seg button{padding:8px 16px;font-weight:900}
+.seg button[aria-pressed="true"]{background:var(--slab);color:var(--slab-ink)}
+.tog{display:flex;align-items:center;gap:10px;font-weight:800}
+.qgroup{margin-bottom:44px}
+.qgroup>h2{font-size:clamp(1.8rem,3.4vw,3rem);font-weight:900;letter-spacing:-.03em;line-height:1;padding:12px 18px;background:var(--slab);color:var(--slab-ink);border:3px solid var(--border);box-shadow:6px 6px 0 var(--maroon);margin-bottom:22px;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.qgroup>h2 small{font-size:.4em;font-weight:800}
+.q{border:3px solid var(--border);background:var(--surface);margin-bottom:14px}
+.qh{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;padding:16px 18px;width:100%}
+.qno{font-size:1.6em;font-weight:900;color:var(--accent);min-width:2ch;letter-spacing:-.03em}
+.qt{font-weight:800;font-size:1.15em;line-height:1.3}
+.qt .tag{margin-right:10px;vertical-align:2px}
+.qa{display:none;padding:16px 20px 20px;border-top:3px solid var(--border);background:var(--soft);font-weight:600;font-size:1.05em}
+.q.open .qa{display:block}
+.q.open .qh .eye-on{display:none}
+.q .eye-off{display:none}
+.q.open .eye-off{display:inline-block}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:18px}
+.w{border:3px solid var(--border);background:var(--surface);padding:18px 20px;display:grid;gap:8px;align-content:start}
+.w .t{font-size:1.6em;font-weight:900;letter-spacing:-.02em;line-height:1.05}
+.w .t2{font-size:1.25em;font-weight:900;color:var(--accent)}
+.w .d{font-weight:600;color:var(--ink)}
+.w .gp{font-weight:800;font-size:.72em;color:var(--mute)}
+.w[data-primary="ar"] .t{font-family:'Cairo',sans-serif;line-height:1.3}
+.empty{padding:40px;border:3px dashed var(--border);font-weight:800;text-align:center}
+
+@media (max-width:900px){
+  .lec{grid-template-columns:1fr}
+  .side{position:static;max-height:none;flex-direction:row;overflow-x:auto;border-right:0;border-bottom:5px solid var(--border);padding:12px}
+  .li{grid-template-columns:auto;min-width:170px}
+  .li .n{text-align:left;font-size:1.5em}
+  .vs{grid-template-columns:1fr}
+  .cmp .row,.g{grid-template-columns:1fr;gap:4px}
+  .weeks{grid-template-columns:repeat(4,1fr)}
+  .donut{grid-template-columns:1fr}
+  .qh{grid-template-columns:auto 1fr}
+  .qh .ico{display:none}
+  .tools{margin-left:0}
+  .filters{position:static}
+  .top{position:static;padding:10px 14px;gap:8px 12px}
+  .brand{font-size:1.1em;flex:1}.brand .mark{width:36px;height:36px}
+  .tools{order:2;margin-left:0}
+  .modes{order:3;width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .mode{padding:8px 6px;font-size:.78em;gap:6px;justify-content:center}
+  .mode .ico{width:20px;height:20px}
+  .ib{width:42px;height:42px}
+  .side{padding:8px 10px;gap:8px}
+  .li{grid-template-columns:auto;min-width:0;padding:4px 14px;border-color:var(--border)}
+  .li>span:nth-child(2){display:none}
+  .li .n{font-size:1.35em}
+  .stage{padding:14px 14px 0}
+  .slidehead{margin-bottom:12px;gap:6px}
+  .hero{grid-template-columns:auto 1fr;gap:12px;margin-bottom:16px}
+  .bignum{font-size:4.2rem}
+  .hero h1{font-size:2rem}
+  .sub{font-size:1em;margin-top:6px}
+  .nb{width:52px;height:52px}
+  .swl{font-size:1.25rem}
+  .switch{width:76px}.switch[aria-checked="true"] i{transform:translateX(28px)}
+  .nav{gap:10px;margin-top:22px}
+  .dot{width:14px}.dot.on{width:28px}
+}
+.credit{margin-top:44px;padding-top:16px;border-top:5px solid var(--border);font-weight:700;font-size:1.05em;color:var(--mute)}
+.credit b{color:var(--ink);font-weight:900;font-size:1.1em}
+.right{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.part{font-weight:800;border:3px solid var(--border);padding:2px 12px;background:var(--surface);font-size:.85em}
+.part b{color:var(--accent);font-weight:900}
+.act{margin-top:36px;border:3px solid var(--border);border-left:14px solid var(--maroon);background:var(--surface);padding:1em 1.3em 1.3em;box-shadow:7px 7px 0 var(--slab)}
+.acthd{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.acthd .tag{background:var(--maroon);color:var(--on-maroon);font-size:.8em}
+.act .qtext{font-size:1.35em;margin:8px 0 16px;max-width:none}
+.act textarea{width:100%;min-height:110px;border:3px solid var(--border);background:var(--bg);color:var(--ink);padding:12px 14px;font:inherit;font-weight:600;resize:vertical}
+.act .model{margin-top:14px;padding:14px 18px;border:3px solid var(--border);background:var(--slab);color:var(--slab-ink);font-weight:600}
+.dot.done{background:var(--slab)}
+.lp{display:inline-block;font-style:normal;margin-top:6px;padding:0 8px;border:2px solid currentColor;font-weight:800;font-size:.7em}
+.reset{margin-top:14px;padding:10px 14px;border:3px dashed var(--border);font-weight:800;font-size:.8em;text-align:center}
+.reset:hover{background:var(--soft)}
+@media (max-width:900px){.reset{display:none}.act{padding:.8em 1em 1em;box-shadow:5px 5px 0 var(--slab)}}
+.bankwrap{display:grid;grid-template-columns:minmax(260px,320px) minmax(0,1fr);min-height:calc(100vh - var(--hh,92px))}
+.fside{border-right:5px solid var(--border);padding:16px 14px 40px;position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--hh,86px));align-self:start;max-height:calc(100vh - var(--hh,92px) - 8px);overflow:auto}
+.fbody{display:flex;flex-direction:column;gap:14px}
+.ftoggle{display:none;align-items:center;gap:10px;width:100%;padding:12px 16px;border:3px solid var(--border);background:var(--slab);color:var(--slab-ink);font-weight:900}
+.fh{font-weight:900;color:var(--accent);font-size:.85em}
+.fl{display:grid;gap:8px}
+.fb{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border:3px solid var(--border);font-weight:800;background:var(--surface);line-height:1.15}
+.fb b{font-weight:900;color:var(--accent)}
+.fb:hover{box-shadow:4px 4px 0 var(--maroon)}
+.fb[aria-pressed="true"]{background:var(--slab);color:var(--slab-ink);box-shadow:5px 5px 0 var(--maroon)}
+.fb[aria-pressed="true"] b{color:var(--slab-ink)}
+.fside .find{flex:none;width:100%}
+.fside .seg{width:100%}.fside .seg button{flex:1;text-align:center;padding:8px 6px}
+.fmain{min-width:0}
+@media (max-width:900px){
+  .bankwrap{grid-template-columns:1fr}
+  .fside{position:static;max-height:none;border-right:0;border-bottom:5px solid var(--border);padding:12px 14px}
+  .ftoggle{display:flex}
+  .fbody{display:none;margin-top:12px}
+  .fside.open .fbody{display:flex}
+}
+/* practice */
+.btn.alt{background:var(--surface);color:var(--ink);box-shadow:5px 5px 0 var(--slab)}
+.btn.alt:hover{background:var(--soft)}
+.btn[hidden]{display:none}
+.big-btn{font-size:1.4em;padding:18px 32px}
+.ocard{border:3px solid var(--border);border-left:14px solid var(--maroon);background:var(--surface);padding:1.1em 1.4em 1.4em;box-shadow:7px 7px 0 var(--slab);max-width:1000px}
+.otop{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.clock{margin-left:auto;font-size:2.2em;font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.clock.up{color:var(--accent)}
+.tbar{height:16px;border:3px solid var(--border);background:var(--soft);margin:10px 0 16px}
+.tbar i{display:block;height:100%;background:var(--maroon);transition:width 1s linear}
+.oq{font-size:1.7em;font-weight:900;line-height:1.2;letter-spacing:-.02em;margin:10px 0 18px}
+.oact{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+.ocard .model{margin-top:16px;padding:14px 18px;border:3px solid var(--border);background:var(--slab);color:var(--slab-ink);font-weight:600}
+.flash{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;text-align:center;width:100%;min-height:320px;padding:28px;border:3px solid var(--border);background:var(--surface);box-shadow:7px 7px 0 var(--slab)}
+.flash.flipped{background:var(--slab);color:var(--slab-ink)}
+.ff,.fb2{font-size:clamp(2rem,5vw,3.6rem);font-weight:900;letter-spacing:-.03em;line-height:1.1}
+.fdef{font-weight:600;font-size:.95em;max-width:46ch}
+.dgrid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(280px,1fr);gap:26px;align-items:start}
+.dfield{display:grid;gap:6px;font-weight:800}
+.dfield textarea,.dfield select{width:100%;border:3px solid var(--border);background:var(--surface);color:var(--ink);padding:10px 14px;font:inherit;font-weight:600}
+.dchk{display:flex;gap:10px;align-items:flex-start;font-weight:700;margin-bottom:8px}
+.dchk span{flex:none;width:28px;height:28px;display:grid;place-items:center;border:3px solid var(--border)}
+.dchk.ok span{background:var(--slab);color:var(--slab-ink)}
+.dchk.no span{background:var(--surface);color:var(--mute)}
+.dout p{font-weight:600;margin-bottom:6px}
+/* projector mode */
+html.proj body{font-size:clamp(22px,2.1vw,32px)}
+html.proj .side,html.proj .reset{display:none}
+html.proj .lec{grid-template-columns:1fr}
+html.proj .stage{padding:clamp(18px,3vw,48px) clamp(24px,5vw,90px)}
+html.proj .top{padding:6px 18px}
+html.proj .brand small{display:none}
+html.ui-ar .mode,html.ui-ar .fside,html.ui-ar .part,html.ui-ar .tog,html.ui-ar .ftoggle,html.ui-ar .reset,html.ui-ar .bank h1,html.ui-ar .lede,html.ui-ar .li,html.ui-ar .act .note,html.ui-ar .act .tag,html.ui-ar .slidehead .kick,html.ui-ar .btn,html.ui-ar .ocard .note,html.ui-ar .dfield,html.ui-ar .dchk,html.ui-ar .qn{font-family:'Cairo','Archivo',system-ui,sans-serif}
+@media (max-width:900px){
+  .modes{grid-template-columns:repeat(4,1fr)!important}
+  .dgrid{grid-template-columns:1fr}
+  .clock{font-size:1.7em}.oq{font-size:1.4em}
+}
+@media (max-width:480px){.mode .ico{display:none}}
+/* print */
+@media print{
+  .top,.side,.fside,.nav,.reset,.ftoggle,.credit,.oact,.switch,#ftoggle{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  .lec,.bankwrap{display:block}
+  .qa{display:block!important;background:#fff!important;border-top:1px solid #000!important}
+  .q,.w,.card{break-inside:avoid;border:1px solid #000!important}
+  .qgroup>h2{background:#fff!important;color:#000!important;box-shadow:none!important;border:2px solid #000!important}
+  .qgroup{break-before:auto}
+  .q .ico{display:none}
+  .dgrid{display:block}
+  *{box-shadow:none!important}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="mark" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h11a3 3 0 0 1 3 3v3H8a3 3 0 0 1-3-3"/><path d="M20 19H9a3 3 0 0 1-3-3v-2h10a3 3 0 0 1 3 3z"/></svg></span><span>ENGL 470<small>Discussion &amp; Debate</small></span></div>
+  <div class="modes" role="tablist" aria-label="Sections" id="modes"></div>
+  <div class="tools">
+    <button class="ib" id="btnLang" aria-label="Switch interface language" title="العربية / English" style="font-weight:900;font-size:1.15em">ع</button>
+    <button class="ib" id="btnProj" aria-pressed="false" aria-label="Projector mode" title="Projector mode"><svg class="ico" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12"/><path d="M10 8l5 3-5 3z"/><path d="M8 20h8M12 16v4"/></svg></button>
+    <button class="ib" id="btnTheme" aria-label="Toggle light and dark theme" title="Light / dark"><svg class="ico moon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></svg><svg class="ico sun" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></button>
+    <button class="ib" id="btnFull" aria-label="Toggle full screen" title="Full screen"><svg class="ico" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+  </div>
+</header>
+<main id="app"></main>
+<script>
+(()=>{'use strict';
+/* ===== saved progress + UI language ===== */
+const STORE_KEY='engl470.v1';
+const SV={part:{},hq:{},hw:{},theme:null,proj:false,ui:'en',deb:{}};
+try{const r=localStorage.getItem(STORE_KEY);if(r){const o=JSON.parse(r);Object.keys(SV).forEach(k=>{if(o[k]!==undefined)SV[k]=o[k];});}}catch(e){}
+const save=()=>{try{localStorage.setItem(STORE_KEY,JSON.stringify(SV));}catch(e){}};
+let UI=SV.ui==='ar'?'ar':'en';
+const L=(en,ar)=>UI==='ar'?ar:en;
+const LECAR={'1':['المناقشة والمناظرة','صيغ الحديث والحوار'],'2':['أساسيات التفكير الناقد','أسس اتخاذ القرار'],'3':['نوعان من الاستدلال','الادعاءات والحجج والاستنباط والاستقراء'],'5':['التفكير الواضح والمغالطات','معوّقات التفكير الواضح'],'6':['المصداقية','الادعاء ومصدره'],'7':['تقييم الادعاء','الملاحظة والمعلومات الخلفية'],'8':['الإقناع عبر الخطابة','الأساليب والتقنيات'],'9':['الكتابة الحجاجية','التخطيط والكتابة والمراجعة'],'P1':['المشروع الأول','هل يصحّ أن يكون الأطفال مؤثرين؟']};
+const GAR={
+ q:{l1:'م1 · المناقشة والمناظرة',l2:'م2 · أساسيات التفكير الناقد',l3:'م3 · نوعا الاستدلال',l3p:'م3 · تدريب: الاستنباط والاستقراء',l5:'م5 · التفكير الواضح والمغالطات',l6:'م6 · المصداقية: الادعاء والمصدر',l7:'م7 · تقييم الادعاء',l8:'م8 · الإقناع عبر الخطابة',l9:'م9 · الكتابة الحجاجية',p1:'المشروع 1 · الأطفال المؤثرون'},
+ w:{l1:'م1 · المناقشة والمناظرة',l2:'م2 · أساسيات التفكير الناقد',l3:'م3 · الادعاءات ونوعا الاستدلال',l5:'م5 · التفكير الواضح والمغالطات',l67:'م6–7 · المصداقية',l8:'م8 · الخطابة والإقناع',l9:'م9 · الكتابة والمشروع 1'}
+};
+const TAGS=[['All','All types','كل الأنواع'],['Def','Define','عرّف'],['Exp','Explain','اشرح'],['App','Apply','طبّق'],['T/F','True / False','صح / خطأ'],['Cmp','Compare','قارن']];
+const tagLabel=c=>{const t=TAGS.find(x=>x[0]===c);return t?(UI==='ar'?t[2]:c):c;};
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const IC={
+ slides:'<path d="M3 5h18v11H3zM8 20h8M12 16v4"/>',
+ quiz:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17v.01"/>',
+ words:'<path d="M3 18l5-12 5 12M4.8 14h6.4M15 9h6M18 9c0 4-2 7-5 8M16 13c1 2 3 3.5 5 4"/>',
+ left:'<path d="M15 5l-7 7 7 7"/>',right:'<path d="M9 5l7 7-7 7"/>',
+ eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+ eyeoff:'<path d="M3 3l18 18M10.6 5.1A9.7 9.7 0 0 1 12 5c6 0 10 7 10 7a17 17 0 0 1-3.2 3.9M6.6 6.6C3.7 8.5 2 12 2 12s4 7 10 7c1.6 0 3-.4 4.3-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
+ check:'<path d="M4 12l5 5L20 6"/>',
+ search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
+ redo:'<path d="M20 8a8 8 0 1 0 1 6M20 3v5h-5"/>',
+ practice:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+ timer:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/>',
+ shuffle:'<path d="M3 7h4l10 10h4M3 17h4l3-3M14 10l3-3h4M18 4l3 3-3 3M18 14l3 3-3 3"/>',
+ star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+ print:'<path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M8 14h8v7H8z"/>'
+};
+const ico=(n,s=26)=>`<svg class="ico" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]}</svg>`;
+
+/* ---------- widget builders (return HTML strings) ---------- */
+const hero=(no,title,sub,objs)=>`<div class="hero"><div class="bignum" aria-hidden="true">${no}</div><div><h1>${title}</h1><p class="sub">${sub}</p></div></div><ul class="objs slab">${objs.map(o=>`<li>${o}</li>`).join('')}</ul>`;
+
+const compare=(a,b,rows,gauges,gtitle)=>`<div class="cmp" data-state="a">
+<div class="swbar"><button class="swl" data-side="a">${a}</button><button class="switch" role="switch" aria-checked="false" aria-label="Switch between ${esc(a)} and ${esc(b)}"><i></i></button><button class="swl" data-side="b">${b}</button></div>
+<div class="rows">${rows.map(r=>`<div class="row"><b>${r[0]}</b><p data-a="${esc(r[1])}" data-b="${esc(r[2])}">${r[1]}</p></div>`).join('')}</div>
+${gauges?`<div class="gauges"><h3>${gtitle||''}</h3>${gauges.map(g=>`<div class="g"><span>${g[0]}</span><div class="gauge"><i style="width:${g[1]}%" data-a="${g[1]}" data-b="${g[2]}"></i></div></div>`).join('')}</div>`:''}
+</div>`;
+
+const fcs=(items,cols)=>`<div class="fcs"><div class="fchead"><button class="switch sm" role="switch" aria-checked="false" data-revall aria-label="Reveal all cards"><i></i></button><span>${L('Reveal all','إظهار الكل')}</span></div><div class="grid ${cols||'g3'}">${items.map(([t,d])=>`<button class="fc" aria-expanded="false"><span class="fct"><span>${t}</span><span>${ico('eye',22).replace('class="ico"','class="ico eye-on"')}${ico('eyeoff',22).replace('class="ico"','class="ico eye-off"')}</span></span><span class="fcd">${d}</span></button>`).join('')}</div></div>`;
+
+const tabs=(items,kind)=>`<div class="tabs ${kind||''}" data-tabs><div class="tablist" role="tablist">${items.map((it,i)=>`<button role="tab" class="tab${i?'':' on'}" data-i="${i}" aria-selected="${!i}">${it[0]}</button>`).join('')}</div>${items.map((it,i)=>`<div class="panel${i?'':' on'}" data-i="${i}" role="tabpanel">${it[1]}</div>`).join('')}</div>`;
+
+const checklist=(items,label)=>`<div class="chk"><p class="note" style="font-weight:800"><span data-cn>0</span> / ${items.length} ${label}</p><div class="meter"><i style="width:0%"></i></div><div class="grid g2">${items.map(t=>`<button class="ck" role="checkbox" aria-checked="false"><span class="box">${ico('check',20)}</span><span>${t}</span></button>`).join('')}</div></div>`;
+
+const QZ={};
+const quiz=(id,items)=>{QZ[id]=items;return `<div class="quiz" data-quiz="${id}"></div>`;};
+
+/* ---------- binders ---------- */
+function wireCompare(root){$$('.cmp',root).forEach(c=>{
+  const set=s=>{c.dataset.state=s;$('.switch',c).setAttribute('aria-checked',String(s==='b'));
+    $$('.row p',c).forEach(p=>p.innerHTML=p.dataset[s]);
+    $$('.gauge i',c).forEach(i=>i.style.width=i.dataset[s]+'%');
+    $$('.swl',c).forEach(x=>x.classList.toggle('on',x.dataset.side===s));};
+  $('.switch',c).onclick=()=>set(c.dataset.state==='a'?'b':'a');
+  $$('.swl',c).forEach(x=>x.onclick=()=>set(x.dataset.side));set('a');});}
+
+function wireFlip(root){$$('.fcs',root).forEach(w=>{
+  const cards=$$('.fc',w),sw=$('[data-revall]',w);
+  cards.forEach(c=>c.onclick=()=>{const o=c.classList.toggle('open');c.setAttribute('aria-expanded',String(o));
+    sw.setAttribute('aria-checked',String(cards.every(x=>x.classList.contains('open'))));});
+  sw.onclick=()=>{const on=sw.getAttribute('aria-checked')!=='true';sw.setAttribute('aria-checked',String(on));
+    cards.forEach(c=>{c.classList.toggle('open',on);c.setAttribute('aria-expanded',String(on));});};});}
+
+function wireTabs(root){$$('[data-tabs]',root).forEach(t=>{
+  const tb=$$(':scope>.tablist>.tab',t),pn=$$(':scope>.panel',t);
+  tb.forEach(b=>b.onclick=()=>{const i=b.dataset.i;tb.forEach(x=>{const on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-selected',String(on));});
+    pn.forEach(p=>p.classList.toggle('on',p.dataset.i===i));});});}
+
+function wireChecks(root){$$('.chk',root).forEach(w=>{
+  const cs=$$('.ck',w),n=$('[data-cn]',w),bar=$('.meter i',w);
+  cs.forEach(c=>c.onclick=()=>{c.setAttribute('aria-checked',String(c.getAttribute('aria-checked')!=='true'));
+    const k=cs.filter(x=>x.getAttribute('aria-checked')==='true').length;n.textContent=k;bar.style.width=(k/cs.length*100)+'%';});});}
+
+function wireQuiz(el){
+  const items=QZ[el.dataset.quiz];let i=0,score=0,locked=false;
+  const draw=()=>{
+    if(i>=items.length){el.innerHTML=`<div class="qres slab"><h3>${L('Your score','نتيجتك')}</h3><p class="big">${score} / ${items.length}</p><p style="margin:14px 0 22px;font-weight:700">${score===items.length?L('Perfect run.','أداء ممتاز.'):score>=items.length*.7?L('Strong result. Review the ones you missed.','نتيجة جيدة. راجع الأسئلة التي أخطأت فيها.'):L('Keep practising: go back to the lecture slides and try again.','واصل التدريب: ارجع إلى شرائح المحاضرة وحاول مجدداً.')}</p><button class="btn" data-r>${ico('redo',22)} ${L('Try again','أعد المحاولة')}</button></div>`;
+      $('[data-r]',el).onclick=()=>{i=0;score=0;draw();};return;}
+    const it=items[i];locked=false;
+    el.innerHTML=`<div class="qprog"><i style="width:${i/items.length*100}%"></i></div><p class="qn">${L('Question','السؤال')} ${i+1} ${L('of','من')} ${items.length} · ${L('Score','النتيجة')} ${score}</p><p class="qtext">${it[0]}</p><div class="opts">${it[1].map((o,k)=>`<button class="opt" data-k="${k}">${o}</button>`).join('')}</div><div class="why" hidden></div><button class="btn next" hidden>${i===items.length-1?L('See score','عرض النتيجة'):L('Next question','السؤال التالي')} ${ico('right',22)}</button>`;
+    $$('.opt',el).forEach(b=>b.onclick=()=>{if(locked)return;locked=true;const k=+b.dataset.k,ok=k===it[2];if(ok)score++;
+      $$('.opt',el).forEach(o=>{const kk=+o.dataset.k;o.classList.toggle('right',kk===it[2]);if(kk===k&&!ok)o.classList.add('wrong');o.disabled=true;});
+      const w=$('.why',el);w.hidden=false;w.innerHTML=`<b>${ok?L('Correct.','صحيح.'):L('Not quite.','ليست دقيقة.')}</b> ${it[3]}`;
+      const n=$('.next',el);n.hidden=false;n.onclick=()=>{i++;draw();};n.focus();});};
+  draw();}
+
+function wireAll(root){wireCompare(root);wireFlip(root);wireTabs(root);wireChecks(root);$$('[data-quiz]',root).forEach(wireQuiz);}
+
+/* ---------- custom widgets ---------- */
+function plausibility(){return `<div class="grid g2" style="align-items:start">
+<div class="stack">
+ <div class="chips" data-presets>
+  <button class="chip" data-p="10,15,40" aria-pressed="false">Marquis’s car is “bright blue”</button>
+  <button class="chip" data-p="60,5,50" aria-pressed="false">Ducks quack in Morse code</button>
+  <button class="chip" data-p="60,90,85" aria-pressed="false">Ducks mate for life (bird expert)</button>
+ </div>
+ <div class="slrow"><label for="s1">Fit with your own observations</label><input class="range" id="s1" type="range" min="0" max="100" value="60"><div class="ends"><span>Conflicts</span><span>Fits</span></div></div>
+ <div class="slrow"><label for="s2">Fit with background information</label><input class="range" id="s2" type="range" min="0" max="100" value="60"><div class="ends"><span>Conflicts</span><span>Fits</span></div></div>
+ <div class="slrow"><label for="s3">Credibility of the source</label><input class="range" id="s3" type="range" min="0" max="100" value="60"><div class="ends"><span>Interested / unknown</span><span>Expert, disinterested</span></div></div>
+</div>
+<div class="stack"><div class="mtr" aria-hidden="true"><b id="needle" style="left:50%"></b></div>
+<div class="verdict" id="verdict" role="status"></div>
+<p class="note">Illustrative model: the lecture gives the principles, not a formula. Move the sliders to see how conflicts with observation or background information push a claim towards rejection.</p></div></div>`;}
+function wirePlaus(root){const s=[1,2,3].map(i=>$('#s'+i,root)),nd=$('#needle',root),vd=$('#verdict',root);if(!nd)return;
+  const go=()=>{const v=Math.round(s[0].value*.4+s[1].value*.4+s[2].value*.2);nd.style.left=`calc(${v}% - 5px)`;
+    vd.textContent=v<34?'Low initial plausibility: lean towards rejecting it unless very strong evidence is produced.':v<67?'Doubtful: look for more evidence and check the source before accepting it.':'Reasonable initial plausibility: worth accepting, and still open to checking.';};
+  s.forEach(x=>x.oninput=()=>{$$('[data-presets] .chip',root).forEach(c=>c.setAttribute('aria-pressed','false'));go();});
+  $$('[data-presets] .chip',root).forEach(c=>c.onclick=()=>{const p=c.dataset.p.split(',').map(Number);p.forEach((x,i)=>s[i].value=x);
+    $$('[data-presets] .chip',root).forEach(k=>k.setAttribute('aria-pressed',String(k===c)));go();});go();}
+
+function balance(){const pros=['Unique family experiences','Skill-building','Financial benefits'],cons=['Child exploitation','Loss of privacy','Exposure to harmful content','Psychological pressure','Disrupted school and play'];
+ return `<div class="grid g2" style="align-items:start"><div class="stack">
+ <div><p class="kick" style="margin-bottom:8px">Add to the “Yes” side</p><div class="chips" data-bal="p">${pros.map(t=>`<button class="chip" aria-pressed="false">${t}</button>`).join('')}</div></div>
+ <div><p class="kick" style="margin-bottom:8px">Add to the “No” side</p><div class="chips" data-bal="c">${cons.map(t=>`<button class="chip" aria-pressed="false">${t}</button>`).join('')}</div></div>
+ <p class="note" id="balmsg" role="status" style="font-size:1.1em;color:var(--ink)">Tap arguments to load the scale.</p></div>
+ <div class="bal"><svg viewBox="0 0 640 380" role="img" aria-label="Balance scale: pros on the left, cons on the right"><rect x="300" y="90" width="40" height="230" fill="var(--ink)"/><rect x="200" y="320" width="240" height="26" fill="var(--ink)"/>
+ <g class="beam" id="beam"><rect x="60" y="80" width="520" height="20" fill="var(--slab)" stroke="var(--ink)" stroke-width="4"/>
+ <line x1="90" y1="100" x2="90" y2="190" stroke="var(--ink)" stroke-width="4"/><rect x="20" y="190" width="140" height="18" fill="var(--slab)" stroke="var(--ink)" stroke-width="4"/><text id="pn" x="90" y="170" text-anchor="middle" font-size="60" font-weight="900" fill="var(--ink)">0</text>
+ <line x1="550" y1="100" x2="550" y2="190" stroke="var(--ink)" stroke-width="4"/><rect x="480" y="190" width="140" height="18" fill="var(--maroon)" stroke="var(--ink)" stroke-width="4"/><text id="cn" x="550" y="170" text-anchor="middle" font-size="60" font-weight="900" fill="var(--ink)">0</text></g>
+ <text x="90" y="366" text-anchor="middle" font-size="26" font-weight="900" fill="var(--ink)">Yes</text><text x="550" y="366" text-anchor="middle" font-size="26" font-weight="900" fill="var(--ink)">No</text></svg></div></div>`;}
+function wireBalance(root){const beam=$('#beam',root);if(!beam)return;const upd=()=>{const p=$$('[data-bal="p"] .chip[aria-pressed="true"]',root).length,c=$$('[data-bal="c"] .chip[aria-pressed="true"]',root).length;
+  $('#pn',root).textContent=p;$('#cn',root).textContent=c;const a=Math.max(-14,Math.min(14,(c-p)*4));beam.style.transform=`rotate(${a}deg)`;
+  $('#balmsg',root).textContent=p===c?(p?'Balanced: the debate is still open.':'Tap arguments to load the scale.'):c>p?'The “No” side is heavier. Would evidence change that?':'The “Yes” side is heavier. What is the strongest rebuttal?';};
+  $$('.chip',root).forEach(b=>{if(b.closest('[data-bal]'))b.onclick=()=>{b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'));upd();};});}
+
+function devices(D){const groups=['All','Devices I','Devices II','Devices III','Devices IV','Proof & repetition','Visuals'];
+ return `<div class="chips" data-dev>${groups.map((g,i)=>`<button class="chip" aria-pressed="${i===0}" data-g="${g}">${g}</button>`).join('')}</div><div class="grid g3" id="devgrid">${D.map(d=>`<button class="fc" data-g="${d[0]}" aria-expanded="false"><span class="fct"><span>${d[1]}</span><span>${ico('eye',22).replace('class="ico"','class="ico eye-on"')}${ico('eyeoff',22).replace('class="ico"','class="ico eye-off"')}</span></span><span class="fcd">${d[2]}<span class="ex" style="display:block">${d[3]}</span></span></button>`).join('')}</div>`;}
+function wireDevices(root){const ch=$$('[data-dev] .chip',root),cards=$$('#devgrid .fc',root);if(!ch.length)return;
+  ch.forEach(c=>c.onclick=()=>{ch.forEach(x=>x.setAttribute('aria-pressed',String(x===c)));cards.forEach(k=>k.hidden=!(c.dataset.g==='All'||k.dataset.g===c.dataset.g));});
+  cards.forEach(c=>c.onclick=()=>{const o=c.classList.toggle('open');c.setAttribute('aria-expanded',String(o));});}
+const LEC=[];
+const S=(t,h,i)=>({t,h,i});
+
+/* ================= LECTURE 1 ================= */
+LEC.push({no:'1',name:'Discussion & Debate',sub:'Formats of talk and dialogue',slides:[
+S('Discussion and Debate',()=>hero('1','Discussion & Debate','How people exchange, contest and record ideas.',['Introduce the notion of the course','Differentiate between discussion and debate','Benefits of debate','Introduce the notion of dialogue'])),
+S('Discussion or debate?',()=>`<p class="lead" style="margin-bottom:22px">Flip the switch to compare the two formats.</p>`+compare('Discussion','Debate',[
+ ['Tone','Informal','Formal'],
+ ['Aim','Exchange knowledge, ideas and information; reach mutual understanding','Persuade, convince or prove a point with arguments, evidence and rebuttals'],
+ ['Nature','Cooperative','Competitive'],
+ ['Sides','No opposing side; people share views','Always two opposing sides: one for, one against the assigned topic'],
+ ['Ending','No accepted ending or concrete conclusion','Leads to a conclusion: one side wins, the other loses'],
+ ['Format','A group exchanging ideas','A formal contest between individuals or teams, with rules']
+],[['Formality',30,90],['Competition',15,95],['Persuasion',25,95],['Closure',15,90]],'Profile of each format (illustrative scale)')),
+S('Inside a debate',()=>`<div class="vs"><div class="side2 pro"><h3>Pro</h3><p>Agrees with the statement or idea</p></div><div class="side2 con"><h3>Con</h3><p>Does not agree with it</p></div></div>
+<p class="lead wide" style="margin-bottom:22px">A debate is an organized argument, or contest of ideas, in which participants discuss a topic from two opposing sides.</p>`+
+tabs([['Motion: kids as influencers','<p class="quote">“Children should be social media influencers.”</p><p class="note" style="margin-top:12px;font-size:1.05em">Each side shows, in an organized and clever way, why it has the right answer, using examples and evidence while working towards a conclusion.</p>'],
+['Pro sample','<div class="slab"><h3>Pro</h3><p>Influencing builds skills and family experiences, and brings financial benefits.</p></div>'],
+['Con sample','<div class="slab" style="background:var(--maroon)"><h3>Con</h3><p>Influencing risks exploitation, loss of privacy and a disrupted childhood.</p></div>']])),
+S('Skills and benefits',()=>tabs([['Skills for debating',fcs([
+ ['Logical thinking','Think logically and clearly.'],['Self-confidence','Speak up and stand behind your case.'],['Language skills','Effective speaking and active listening.'],
+ ['Communication','Explain ideas in a way others can follow.'],['Time management','Deliver arguments within the time given.'],['Creativity','Find fresh angles and examples.']])],
+ ['Benefits of debate',fcs([
+ ['Communication','Excellent oral and written communication skills.'],['Critical thinking','Excellent critical thinking skills.'],['Research','Tools for research, organization and presentation.'],
+ ['Public speaking','Strategies to overcome the fear of public speaking.'],['Participation','Confidence and desire to take part in all academic classes.']])]])),
+S('Dialogue and its rules',()=>`<p class="lead wide" style="margin-bottom:22px">A dialogue is a conversation between two or more people about a topic, in any setting: school, college or work. In a general dialogue people freely express their ideas.</p>`+
+checklist(['Always listen carefully to what other people say.','Think before speaking.','Always try to be positive.','Only one person speaks at a time.','Raise your hand to be recognized.','No interruption while someone speaks.','Criticize the idea, not the person.','No laughing at a speaker (unless it is a joke).','Encourage everyone to participate.','Use “I” statements; do not generalize.','Take other people’s points of view seriously.','Watch your body language and manners.','Use open-ended questions.','Be honest in what you say.','Speak positively of your own views, not negatively of others’.','Respect other people’s views, even if you disagree.','Do not treat anyone as a spokesperson for their faith.'],'rules practised')),
+S('Direct and indirect dialogue',()=>compare('Direct','Indirect',[
+ ['What it is','Speakers’ words are quoted, and a dialogue tag names the speaker','The conversation is summarized without direct quotation'],
+ ['Punctuation','Quotation marks around the spoken words','No quotation marks'],
+ ['Example','“Where did you go?” she asked.','She asked where he had gone.'],
+ ['Use it when','You want the exact words and voice','You only need the gist of what each person said']])),
+S('Tags and plays',()=>tabs([['In prose',`<div class="grid g2"><div class="card"><h3>Standard tags</h3><p>“Where did you go?” she asked.<br>I said, “Leave me alone.”<br>“Answer my question,” said Monica, “or I’m leaving.”</p></div><div class="card"><h3>Distracting tags</h3><p>“Nice to meet you,” she <mark>beamed</mark>.<br>“Nice to meet you, too,” Wendy <mark>chimed</mark>.<br><span class="note">Non-standard tags pull attention from the dialogue onto the tag.</span></p></div></div>`],
+['In plays',`<div class="slab" style="font-size:1.15em;font-weight:700"><p><b>ROMEO.</b> Have not saints lips, and holy palmers too?</p><p style="margin-top:10px"><b>JULIET.</b> Ay, pilgrim, lips that they must use in prayer.</p></div><p class="note" style="margin-top:14px">In plays, each line is preceded by the name of the person speaking. Novelists use dialogue to break the monotony of prose and keep the reader interested.</p>`]]))
+]});
+
+/* ================= LECTURE 2 ================= */
+LEC.push({no:'2',name:'Critical Thinking Basics',sub:'Foundations of decision making',slides:[
+S('Critical thinking basics',()=>hero('2','Critical Thinking Basics','Foundations of decision making.',['Decision-making is a thoughtful process of choosing among options for acting or thinking','Good, reasoned and ethical decisions depend on thinking critically','Critical thinking breaks argumentation into parts to judge validity and strength'])),
+S('Thinking about thinking',()=>`<p class="big" style="margin-bottom:22px">Identify. Analyze. Fix.</p><p class="lead wide">Critical thinking is the ability to think in an organized and rational manner in order to understand connections between ideas or facts: identifying, analyzing, then fixing flaws in the way we think.</p><div class="grid g3" style="margin-top:22px"><div class="card"><h3>Communication</h3><p>Effective communication and problem-solving.</p></div><div class="card"><h3>Commitment</h3><p>To overcome our native egocentrism and sociocentrism.</p></div><div class="card"><h3>Better advocates</h3><p>Critical thinkers are better users of information.</p></div></div>`),
+S('Seven steps',()=>tabs([
+ ['Identify','<h3>Identify the problem or question</h3><p class="lead">Start by stating exactly what has to be decided.</p>'],
+ ['Gather','<h3>Gather data, opinions and arguments</h3><p class="lead">Collect what is known and what others say.</p>'],
+ ['Analyze','<h3>Analyze and evaluate the data</h3><p class="lead">Judge how reliable and relevant it is.</p>'],
+ ['Assumptions','<h3>Identify assumptions</h3><p class="lead">Spot what is taken for granted.</p>'],
+ ['Significance','<h3>Establish significance</h3><p class="lead">Decide what really matters for the question.</p>'],
+ ['Conclude','<h3>Make a decision or reach a conclusion</h3><p class="lead">Commit to the best-supported answer.</p>'],
+ ['Present','<h3>Present or communicate</h3><p class="lead">Share the result clearly with others.</p>']],'stepper')),
+S('A critical thinker…',()=>fcs([['Asks vital questions','Formulates problems and questions clearly and precisely.'],['Weighs information','Gathers and assesses relevant information, interprets it with abstract ideas, and tests conclusions against criteria and standards.'],['Thinks open-mindedly','Works within alternative systems of thought, assessing their assumptions, implications and practical consequences.'],['Communicates','Works with others to figure out solutions to complex problems.']],'g2')),
+S('Mini glossary',()=>fcs([['Argumentation','Reason-giving in communicative situations by people whose purpose is to justify acts, beliefs, attitudes and values.'],['Coercion','The threat or use of force.'],['Critical thinking','The ability to analyze, criticize and advocate ideas; to reason inductively and deductively; and to reach sound conclusions.'],['Debate','The process of inquiry and advocacy; seeking a reasoned judgment on a proposition.'],['Ethics','Constructs that guide decision-making by giving standards of how we ought to act.'],['Good reasons','Psychologically compelling reasons that make further inquiry unnecessary and redundant.'],['Persuasive communication','Communication intended to influence acts, beliefs, attitudes and values.'],['Propaganda','Sustained, organized, multi-media persuasion aimed at a mass audience.'],['Teleological ethics','Result-oriented ethics: judge an act by its good or bad consequences.']])),
+S('Where it comes from',()=>`<p class="lead wide" style="margin-bottom:22px">A relatively new term, but its roots are traceable to Socrates. Knowing its history shows how far societies foster or hinder it.</p><div class="grid g3"><div class="slab"><h3>Socrates</h3><p>The root of critical thinking.</p></div><div class="slab"><h3>Plato</h3><p>Knowledge, ethics, politics.</p></div><div class="slab"><h3>Aristotle</h3><p>Science and human life.</p></div></div><p class="note" style="margin-top:14px">The three most influential Greek philosophers in history shaped Western philosophy.</p>`),
+S('Why it matters',()=>fcs([['Deals with change','Flexible intellectual skills to analyze information and combine diverse knowledge.'],['Language skills','Improves how we express ideas and how well we understand texts.'],['Creativity','Evaluates new ideas, selects the best and modifies them.'],['Self-reflection','Provides tools to justify our values and decisions.'],['Foundation of science','Science needs critical reasoning in experiment and theory.'],['Independence','Learners make sense of the world and learn from mistakes.']]))
+]});
+
+/* ================= LECTURE 3 ================= */
+LEC.push({no:'3',name:'Two Kinds of Reasoning',sub:'Claims, arguments, deduction, induction',slides:[
+S('Two kinds of reasoning',()=>hero('3','Two Kinds of Reasoning','Claims, issues, arguments: then deduction and induction.',['Critical thinking evaluates claims however we come up with them','An argument gives a reason for thinking a claim is true','Good arguments are valid (deductive) or supportive (inductive)'])),
+S('Claim, issue, argument',()=>`<p class="lead" style="margin-bottom:18px">Tap each part of the example.</p>`+tabs([
+['Claim','<div class="card"><h3>Claim</h3><p>A statement that is either true or false, e.g. “Columbus is the most populous city in Ohio.” It expresses an opinion or belief.</p></div>'],
+['Issue','<div class="card"><h3>Issue</h3><p>What we raise when we question a claim: is it true or not? An issue is simply a question. <b>Should Sam be excused for missing class?</b></p></div>'],
+['Premise','<div class="slab"><h3>Premise</h3><p>A claim offered as a reason for another claim. <b>Sam’s grandmother died and he attended the funeral.</b></p></div>'],
+['Conclusion','<div class="slab" style="background:var(--maroon)"><h3>Conclusion</h3><p>The claim the premise supports; it states a position on the issue. <b>Sam should be excused for missing class.</b></p></div>']],'stepper')),
+S('Deductive or inductive?',()=>`<p class="lead" style="margin-bottom:22px">Direction of travel is the key difference.</p>`+compare('Deductive','Inductive',[
+ ['Direction','General → specific (top-down)','Specific → general (bottom-up)'],
+ ['Aim','Testing an existing theory','Developing a theory'],
+ ['A good one is','“Valid”: premises cannot be true and the conclusion false','Supportive: true premises raise the probability of the conclusion'],
+ ['Example','Josh lives in Alaska, therefore he lives in the United States','Josh lives in Alaska, therefore he uses mosquito repellent'],
+ ['Limitation','True only if all premises are true and the terms are clear','Can never be proven, but can be invalidated']],[['Certainty of conclusion',95,45],['Starts from general claims',95,10]],'Deduction vs induction (illustrative scale)')),
+S('The airline example',()=>tabs([['Deductive: 4 stages',`<div class="grid g2"><div class="card"><h3>1. Theory</h3><p>Low-cost airlines always have delays.</p></div><div class="card"><h3>2. Hypothesis</h3><p>If passengers fly low-cost, they will always be delayed.</p></div><div class="card"><h3>3. Collect data</h3><p>Flight data of low-cost airlines.</p></div><div class="slab"><h3>4. Analyze</h3><p>5 of 100 flights are not delayed: the hypothesis is rejected.</p></div></div>`],
+['Inductive: 3 stages',`<div class="grid g3"><div class="card"><h3>1. Observation</h3><p>A low-cost flight is delayed.</p></div><div class="card"><h3>2. Pattern</h3><p>Another 20 low-cost flights are delayed.</p></div><div class="slab" style="background:var(--maroon)"><h3>3. Theory</h3><p>Low-cost airlines always have delays.</p></div></div>`]])),
+S('Practice: sort the reasoning',()=>quiz('ind',[
+ ['All the swans I’ve seen are white; therefore, all swans are white.',['Inductive','Deductive'],0,'Generalizes from observed cases.'],
+ ['All men are mortal. Socrates is a man. Therefore, Socrates is mortal.',['Inductive','Deductive'],1,'A general rule applied to a case; the conclusion must follow.'],
+ ['Several friends got a raise; therefore, everyone at that company gets a raise.',['Inductive','Deductive'],0,'A small sample stretched to a general claim.'],
+ ['All birds have feathers. A sparrow is a bird. Therefore, a sparrow has feathers.',['Inductive','Deductive'],1,'General rule applied to a member of the category.'],
+ ['I’ve only met nice people in that city; therefore, everyone there is nice.',['Inductive','Deductive'],0,'A hasty generalization from experience.'],
+ ['If it rains, the grass will be wet. It is raining. Therefore, the grass is wet.',['Inductive','Deductive'],1,'An if–then rule applied.'],
+ ['The last few winters have been extremely cold; therefore, next winter will be cold.',['Inductive','Deductive'],0,'A pattern projected forward.'],
+ ['Every cat I’ve owned has been friendly; therefore, all cats are friendly.',['Inductive','Deductive'],0,'Personal cases to all cats.'],
+ ['All squares are rectangles. This shape is a square. Therefore, it is a rectangle.',['Inductive','Deductive'],1,'Category membership.'],
+ ['All humans need oxygen to survive. Maria is a human. Therefore, Maria needs oxygen.',['Inductive','Deductive'],1,'General rule applied to Maria.'],
+ ['Every time I eat strawberries my throat itches; therefore, I’m allergic to strawberries.',['Inductive','Deductive'],0,'A cause inferred from repeated observation.'],
+ ['No reptiles have fur. A snake is a reptile. Therefore, a snake does not have fur.',['Inductive','Deductive'],1,'An exclusion rule applied.'],
+ ['All roses are flowers. This is a rose. Therefore, this is a flower.',['Inductive','Deductive'],1,'Category membership.'],
+ ['Students who study in groups tend to get better grades; therefore, group study improves grades.',['Inductive','Deductive'],0,'A pattern plus a causal leap.'],
+ ['All mammals have backbones. A dolphin is a mammal. Therefore, a dolphin has a backbone.',['Inductive','Deductive'],1,'General rule applied to a dolphin.']]))
+]});
+/* ================= LECTURE 5 ================= */
+LEC.push({no:'5',name:'Clear Thinking & Fallacies',sub:'Obstacles to clear thinking',slides:[
+S('Clear thinking and fallacies',()=>hero('5','Clear Thinking & Fallacies','Precision in logic, clarity in communication.',['Clear thinking: expressing ideas simply and following logical arguments','A fallacy is a subtle, deceptive obstacle to clear thinking','Four families: evidence, reasoning, language, pseudoarguments'])),
+S('What is a fallacy?',()=>`<p class="lead wide">Whately’s classic definition: <b>any unsound mode of arguing which appears to demand our conviction, and to be decisive of the question in hand, when in fairness it is not.</b></p>`+compare('Accidental','Deliberate',[
+ ['Who uses it','Well-meaning people who slip','Advocates who exploit listeners or readers'],
+ ['Example','A sincere but unsound argument','Propaganda in an international crisis'],
+ ['Protection','Debate: judges can spot the flaw themselves, and opponents are motivated to point it out','Debate: judges can spot the flaw themselves, and opponents are motivated to point it out']])),
+S('Four families',()=>fcs([
+ ['1 · Evidence','An unsupported assertion presented as a complete argument: partial evidence chosen to fit.'],
+ ['2 · Reasoning','Hasty generalization, analogy, cause, sign.'],
+ ['3 · Language','Ambiguity, verbalism, loaded language, grammatical structure.'],
+ ['4 · Pseudoarguments','Offering irrelevancy, arguing in a circle, ignoring the issue, repeating an assertion, structuring a response.']],'g2')),
+S('Fallacies of reasoning',()=>tabs([
+ ['Hasty generalization','<div class="card"><h3>Hasty generalization</h3><p>A conclusion based on insufficient evidence; decision-makers will not accept it.</p></div>'],
+ ['Analogy','<div class="card"><h3>Analogy</h3><p>Comparing two similar cases and inferring that what is true of one is true of the other. Test: <b>are there critical differences in the factors compared?</b> A Russian leader claimed Russia was “completely democratic”; the reply pointed to two essential differences from the American system.</p></div>'],
+ ['Cause','<div class="card"><h3>Cause</h3><p>Identifying the relationship between cause and effect, cause-to-effect or effect-to-cause. The cause must be complete, not partial. Weather forecasts predict rain from low-pressure areas, yet we deal in probability, not certainty.</p></div>'],
+ ['Sign','<div class="card"><h3>Sign</h3><p>Using an observable sign as an indication of something else. A neurologist reads the Babinski sign as indicating disease of the corticospinal pathway, and must be on guard against misreading signs.</p></div>']])),
+S('Evidence, language, pseudoarguments',()=>tabs([
+ ['Evidence',`<div class="grid g2"><div class="card"><h3>The review</h3><p>A critic calls a musical dull and inept, with only a few bright spots.</p></div><div class="slab"><h3>The advert</h3><p>Quotes only the good fragments: “brilliantly executed … lavish costuming … flashes of inspiration.”</p></div></div>`],
+ ['Language',fcs([['Ambiguity','A word or passage that can reasonably be read two or more ways.'],['Verbalism','Abundant words that convey little meaning.'],['Loaded language','Emotionally charged words used to reach a conclusion without proof.'],['Grammatical structure','Sentence form that misleads about meaning.']],'g2')],
+ ['Pseudoarguments',fcs([['Offering irrelevancy','Bringing in matters that are not germane.'],['Arguing in a circle','Using the conclusion to support itself.'],['Ignoring the issue','Avoiding the question at stake.'],['Repeating an assertion','Restating rather than proving.'],['Structuring a response','Shaping a reply to avoid the real question.']],'g3')]]))
+]});
+
+/* ================= LECTURE 6 ================= */
+LEC.push({no:'6',name:'Credibility',sub:'The claim and its source',slides:[
+S('Credibility',()=>hero('6','Credibility','Who says it, and can it be believed?',['Credibility is the capability of being believed','We assess credibility of the claim itself and of its source','Interested parties deserve more suspicion than disinterested ones'])),
+S('Dave and the fake bank',()=>`<p class="lead wide" style="margin-bottom:20px">Step through what happened.</p>`+tabs([
+ ['E-mail','<div class="card"><h3>The e-mail</h3><p>“Citibank” warns of a problem with his credit card account and links to a Web site.</p></div>'],
+ ['Site','<div class="card"><h3>The look-alike site</h3><p>It shows the bank’s logo and authentic-looking details, and asks him to confirm account numbers and his Social Security number.</p></div>'],
+ ['Charges','<div class="slab" style="background:var(--maroon)"><h3>The damage</h3><p>His card paid for a plasma TV, a home theater set and car stereos he never ordered.</p></div>'],
+ ['Lesson','<div class="slab"><h3>Phishing</h3><p>A ploy to identify victims for identity theft and credit card fraud. Give no credibility to an e-mail from a “bank” asking for personal identifying information by e-mail or Web site.</p></div>']],'stepper')),
+S('Two arenas',()=>`<div class="grid g2" style="margin-bottom:20px"><div class="slab"><h3>The claim itself</h3><p>Some claims lack initial plausibility whoever says them.</p></div><div class="slab" style="background:var(--maroon)"><h3>The claim’s source</h3><p>Sources vary in credibility, just as claims do.</p></div></div>`+compare('Ducks quack in Morse code','Ducks mate for life',[
+ ['Plausibility','None: rejected immediately, whatever the source','Credible claim'],
+ ['Depends on the source?','No','Yes: a bird book or bird expert makes it far more believable'],
+ ['Verdict','Reject','Believe, according to the source']])),
+S('Interested or disinterested?',()=>compare('Interested party','Disinterested party',[
+ ['Definition','Stands to gain from our belief in a claim','Has no stake in our belief either way'],
+ ['Treatment','View with much more suspicion','Trust more, though not every disinterested party has good information'],
+ ['Friend’s investment tip','Loses credibility if he earns a substantial commission','Gains credibility if he invested his own money'],
+ ['The neighbor’s denial','Loses credibility if he owns a silencer and an untraceable .45','Credible if you have always liked and trusted him']])),
+S('Judging a person’s credibility',()=>`<p class="lead wide" style="margin-bottom:20px">Flip between what people wrongly use and what actually matters.</p>`+compare('Irrelevant cues','Relevant grounds',[
+ ['Physical','Eye contact, sweating, nervous laugh, height, loudness, assertiveness','—'],
+ ['Personal traits','Gender, age, ethnicity, accent, mannerisms, clothes','—'],
+ ['Knowledge','—','Education, experience, accomplishments, reputation, position'],
+ ['Expertise','Occupation is a weak guide to moral character or truthfulness','Claims must pertain to the expert’s field and not conflict with other experts in it']]))
+]});
+
+/* ================= LECTURE 7 ================= */
+LEC.push({no:'7',name:'Assessing the Claim',sub:'Observation and background information',slides:[
+S('Assessing the content of the claim',()=>hero('7','Assessing the Claim','Does it fit what we saw and what we know?',['Claims fail when they conflict with our observations or background knowledge','We give every claim an initial plausibility','The less it fits, the more suspicious we should be'])),
+S('Observation vs report',()=>`<div class="grid g2" style="margin-bottom:20px"><div class="slab"><h3>You saw</h3><p class="big" style="font-size:3rem">A red Mini Cooper</p></div><div class="slab" style="background:var(--maroon)"><h3>Parker says</h3><p class="big" style="font-size:3rem">A bright blue one</p></div></div><p class="lead wide">Moore needs no critical thinking training to reject the claim: it conflicts with his own observation. Our observations are our most reliable source, so a report that conflicts with them is subject to serious doubt.</p>`),
+S('What distorts observation?',()=>fcs([
+ ['Conditions','Tiredness, distraction, worry, emotional upset; bad lighting, noise, fast events; inexact instruments.'],
+ ['Expectations','Beliefs, hopes and fears shape what we see: rats in a “rat-infested” house, séance phenomena that do not exist, teachers rating “brighter” classes higher.'],
+ ['Interests and bias','We overlook faults in people we love and exaggerate flaws in projects we want to fail.'],
+ ['Memory','Observations are only as reliable as memories, and memory can deceive.']],'g2')),
+S('Background information',()=>`<p class="lead wide" style="margin-bottom:20px">The large body of justified beliefs built from what we observed and what we learned from others. We may not recall where we learned it.</p><div class="grid g3"><div class="card"><h3>Initial plausibility</h3><p>A rough assessment of how credible a claim seems, based on how well it fits our background information.</p></div><div class="card"><h3>Good fit</h3><p>Some reasonable degree of initial plausibility.</p></div><div class="card"><h3>Conflict</h3><p>Low initial plausibility: lean towards rejecting it unless very strong evidence is produced.</p></div></div><p class="note" style="margin-top:14px">The broader your background information, the better you can evaluate a report: economics for deficit claims, how Social Security works to see why calling it a savings account is misleading.</p>`),
+S('Plausibility meter',()=>plausibility(),root=>wirePlaus(root)),
+S('Doubts about sources',()=>`<div class="grid g2" style="margin-bottom:20px"><div class="slab"><h3>Knowledge or expertise</h3><p>Judge by education, experience, accomplishments, reputation and position.</p></div><div class="slab" style="background:var(--maroon)"><h3>Veracity, objectivity, accuracy</h3><p>Is the source honest, unbiased and precise?</p></div></div><p class="lead wide">Claims lack credibility to the extent they conflict with observations, experience or background information, or come from sources that lack credibility. Expert claims are most reliable when they pertain to the expert’s field and do not conflict with other experts’.</p>`)
+]});
+
+/* ================= LECTURE 8 ================= */
+const DEV=[
+ ['Devices I','Euphemism','A neutral or positive expression in place of one with negative associations.','“Pre-owned” for “used”.'],
+ ['Devices I','Dysphemism','The opposite: a word chosen to produce a negative attitude.','“Terrorist” rather than “freedom fighter”.'],
+ ['Devices I','Weaseler','Hedging that waters a claim down and gives the author a way out.','“Lose up to ten pounds a week.”'],
+ ['Devices I','Downplayer','Makes someone or something look less important.','“He’s just another liberal”; “so-called doctor”.'],
+ ['Devices II','Stereotype','A generalization about all members of a group based on an image of them.','“Women are emotional.”'],
+ ['Devices II','Innuendo','Hints using conversational assumptions, without saying it outright.','Everyone “passed” means everyone who took the exam.'],
+ ['Devices II','Loaded question','A question resting on an unwarranted assumption.','“Have you stopped cheating on exams?”'],
+ ['Devices III','Ridicule / sarcasm','The “horse laugh”: vicious humor used to sway opinion.','“They’re really on top of things.”'],
+ ['Devices III','Hyperbole','Extravagant overstatement.','“I’m so hungry I could eat all the food here.”'],
+ ['Devices IV','Rhetorical definition / explanation','A definition or explanation slanted to persuade.','Defining a term so it carries a verdict.'],
+ ['Devices IV','Rhetorical analogy / misleading comparison','An analogy or comparison used to slant a point.','A comparison that distorts the facts.'],
+ ['Proof & repetition','Proof surrogate','Suggests evidence or authority without citing it.','“Informed sources say…”, “It’s obvious that…”.'],
+ ['Proof & repetition','Repetition','Making the same point again and again until it feels believable.','A claim unlikely on first hearing is no more likely on the hundredth.'],
+ ['Visuals','Visual persuasion','Photos, illustrations and graphics that amplify a message; power depends on content, style and relation to copy.','Visuals and copy must form one message.']];
+LEC.push({no:'8',name:'Persuasion Through Rhetoric',sub:'Devices and techniques',slides:[
+S('Persuasion through rhetoric',()=>hero('8','Persuasion Through Rhetoric','Common devices and techniques.',['Rhetoric is the study of persuasive writing and language','Separate an argument’s logical force from its psychological force','Do not add points for rhetoric, and do not deduct them either'])),
+S('Rhetoric is not argument',()=>`<p class="lead wide" style="margin-bottom:20px">Same debt, two ways of saying it.</p>`+compare('“Still owes over $1,000”','“Owes only a little over $1,000”',[
+ ['Facts','Juanita owes just over $1,000','Juanita owes just over $1,000'],
+ ['Rhetorical push','Alarming','Reassuring'],
+ ['Logical force added','None','None']],[['Psychological pull',85,70],['Extra evidence',0,0]],'Effect on the listener (illustrative)')),
+S('Device explorer',()=>devices(DEV),root=>wireDevices(root)),
+S('Euphemism ⇄ dysphemism',()=>compare('Euphemism','Dysphemism',[
+ ['Armed group','“freedom fighters”','“terrorists”'],
+ ['A car','“pre-owned”','“used up”'],
+ ['Removing a leader','“neutralization”','“assassination”'],
+ ['Someone who died','“passed on”','“dead”'],
+ ['Effect on attitude','Warmer, softer','Colder, harsher']],[['Approval it invites',80,15]],'Same thing, different word (illustrative)')),
+S('Spot the device',()=>quiz('rhet',[
+ ['“Lose up to ten pounds a week.”',['Weaseler','Hyperbole','Proof surrogate','Euphemism'],0,'“Up to” guarantees nothing: you might lose ten pounds or nothing.'],
+ ['“Don’t mind Mr. Pierce; he’s just another liberal.”',['Downplayer','Loaded question','Repetition','Euphemism'],0,'“Just another” plus a stereotype belittles him.'],
+ ['“Informed sources say the plan will fail.”',['Proof surrogate','Innuendo','Hyperbole','Dysphemism'],0,'It hints at authority without naming or proving it.'],
+ ['“Have you stopped cheating on exams?”',['Loaded question','Weaseler','Ridicule','Euphemism'],0,'It assumes past cheating without any reason to think so.'],
+ ['“I’m so hungry I could eat all the food here.”',['Hyperbole','Weaseler','Stereotype','Proof surrogate'],0,'Extravagant overstatement.'],
+ ['Calling a used car “pre-owned”.',['Euphemism','Dysphemism','Downplayer','Repetition'],0,'A positive expression replacing one with negative associations.'],
+ ['A slogan shouted in every ad, all day, every day.',['Repetition','Innuendo','Weaseler','Hyperbole'],0,'Repeating a point dulls critical faculties, but adds no evidence.']]))
+]});
+
+/* ================= LECTURE 9 ================= */
+LEC.push({no:'9',name:'Argumentative Writing',sub:'Plan, write, revise',slides:[
+S('Argumentative writing',()=>hero('9','Argumentative Writing','Taking a stance and supporting it with evidence.',['An argumentative essay takes a stance on an issue and persuades the reader','It rests on thorough research and analysis of relevant sources','It needs focus, sequence and completeness'])),
+S('Four components',()=>fcs([['1 · Statement of the issue','Show the issue is important or interesting, and state it fairly, not so your position looks like the only correct one.'],['2 · Statement of your position','Clear and brief. If the issue is stated clearly, the position is easy to identify.'],['3 · Arguments in support','Succinct, but clarity matters more than brevity. Reasons must be relevant and reliable, or backed by further arguments.'],['4 · Rebuttals of contrary arguments','Answer anticipated objections to your position.']],'g2')),
+S('Four planning hints',()=>tabs([['Focus','<div class="card"><h3>Focus</h3><p>State the issue and your position at the outset in an engaging way, and avoid the trite “In this essay I shall argue…” and its closing echo.</p></div>'],['Stick to the issue','<div class="card"><h3>Stick to the issue</h3><p>Every point must support, illustrate, explain, clarify, elaborate or emphasize your position, or respond to an anticipated objection.</p></div>'],['Logical sequence','<div class="card"><h3>Logical sequence</h3><p>Make a point before you clarify it. A reader should be able to outline your essay with ease.</p></div>'],['Be complete','<div class="card"><h3>Be complete</h3><p>Support your position, answer objections, define the issue sharply, and close every sentence, paragraph and the essay. A conclusion is not a summary; short essays need no summary.</p></div>']],'stepper')),
+S('Good writing practices',()=>checklist(['After the first draft, identify the issue and your position and state both first.','Revise: think in terms of innumerable drafts.','Have someone else read the essay and criticize it.','Read it aloud to catch grammar and punctuation problems.','When satisfied, put it aside and revise again later.'],'practices done')),
+S('Essay types to avoid',()=>fcs([['The Windy Preamble','Long introductory remarks that avoid the issue.'],['The Stream-of-Consciousness Ramble','Thoughts spilled out in the order they arrive.'],['The Knee-Jerk Reaction','A first reaction with no depth or detail.'],['The Glancing Blow','Addresses the issue only obliquely, e.g. history of cycling instead of its health benefits.'],['Let the Reader Do the Work','Non sequiturs, abrupt shifts and irrelevant sidetracks.']])),
+S('Writing in a diverse society',()=>`<p class="lead wide" style="margin-bottom:20px">Avoid reinforcing questionable assumptions about gender, ethnic background, religion, ability or other characteristics.</p><div class="grid g3"><div class="card"><h3>Clarity</h3><p>Careless word choices are imprecise and inaccurate.</p></div><div class="card"><h3>Credibility</h3><p>Biased wording, even unintended, can diminish the writer’s credibility.</p></div><div class="card"><h3>Ethics</h3><p>Do not treat “normal” as white and male: mention race, gender or ethnicity only when it is relevant.</p></div></div>`)
+]});
+
+/* ================= PROJECT 1 ================= */
+LEC.push({no:'P1',name:'Project 1',sub:'Should kids be influencers?',slides:[
+S('Project 1',()=>hero('P1','Should Kids Be Social Media Influencers?','Kidfluencers, brands and the debate.',['Build a debate on kids as paid influencers','Use claims, arguments and rebuttals','Apply credibility and rhetoric'])),
+S('What is an influencer?',()=>`<p class="lead wide" style="margin-bottom:20px">A social media influencer uses social media platforms to express opinions on brands or products, influencing a captive audience. Brands such as Walmart, Staples and Mattel now fund endorsement deals for toddlers and tweens.</p><div class="grid g2"><div class="slab"><p class="big">143,000</p><p style="font-weight:800">Samia’s Instagram followers, at age 4</p></div><div class="slab" style="background:var(--maroon)"><p class="big">203,000</p><p style="font-weight:800">Her YouTube subscribers</p></div></div><p class="note" style="margin-top:14px">Her parents began chronicling her arrival on YouTube and Instagram in 2014; her feeds include paid promotions for brands like Crayola.</p>`),
+S('Weigh it up',()=>balance(),root=>wireBalance(root)),
+S('Questions to debate',()=>fcs([['Should children be influencers?','Why or why not? What age is or isn’t appropriate?'],['Do you follow influencers?','Do they promote products on their feeds?'],['Would you be a paid influencer?','Why or why not? Would your parents let you?'],['Should parents allow it?','Would you let a younger sibling or your own children be paid influencers?']],'g2')),
+S('Apply the course tools',()=>fcs([['Credibility','A paid child influencer is an interested party: gains from our belief, so view with suspicion.'],['Rhetoric','Watch for proof surrogates, repetition and persuasive visual images.'],['Reasoning','Is “kids who influence earn more” an inductive claim? What evidence supports it?'],['Structure','Issue, position, arguments, rebuttals: as in the argumentative essay.']],'g2'))
+]});
+const QB=[
+{id:'l1',title:'Lecture 1 · Discussion & Debate',items:[
+['Def','What is a discussion?','Talking about something with other people and telling them your ideas or opinions (Cambridge). In organizations it is used to choose the best way of handling an issue.'],
+['Def','What is a debate?','An organized argument or contest of ideas in which participants discuss a topic from two opposing sides.'],
+['Def','Who are the “Pro” and “Con” sides?','Pro agrees with the statement or idea; Con does not agree.'],
+['Exp','How does each side work in a debate?','Each side shows in an organized, clever way why it has the right answers, using examples and evidence while working towards a conclusion.'],
+['Cmp','Give five differences between discussion and debate.','Debate is formal, persuasive, competitive, ends with a winner and loser, and always has two opposing sides. Discussion is informal, not persuasive (shares facts, information, ideas), cooperative, has no accepted ending and has no opposing side.'],
+['Exp','What is the purpose of a debate?','To persuade, convince or prove a point through logical arguments, evidence and rebuttals.'],
+['Exp','What is the aim of a discussion?','To understand different perspectives, share ideas, or reach mutual understanding.'],
+['App','“The scientists debated the findings” vs “The scientists discussed the findings.” What is the difference in tone?','“Discussed” suggests a less argumentative, more collaborative atmosphere.'],
+['T/F','A debate does not lead to a conclusion.','False. A debate leads to a conclusion (winner and loser). It is a discussion that has no concrete conclusion.'],
+['Exp','List six skills required for debating.','Logical and clear thinking, self-confidence, language skills (speaking, active listening), communication skills, time management, creativity.'],
+['Exp','State five benefits of discussion and debate.','Better oral and written communication; critical thinking; research, organization and presentation tools; strategies to overcome fear of public speaking; confidence and desire to take part in all academic classes.'],
+['Def','What is a dialogue?','A conversation between two or more people about a topic, in any setting; people freely express their ideas (General Dialogue).'],
+['Exp','State eight rules of dialogue.','Listen carefully; think before speaking; be positive; one person speaks at a time; raise your hand; no interruption; criticize the idea, not the person; use “I” statements; be honest; respect others’ views; use open-ended questions; encourage everyone to participate.'],
+['Exp','Why should we use “I” statements?','To avoid generalizing and to speak for ourselves only.'],
+['Cmp','Direct vs indirect dialogue.','Direct: speakers’ exact words in quotation marks with a dialogue tag. Indirect: the conversation is summarized without direct quotations.'],
+['Def','What is a dialogue tag?','A phrase such as “he asked” or “she said” that attributes a line of dialogue to a speaker.'],
+['Exp','Why are non-standard tags (“she beamed”, “Wendy chimed”) discouraged?','They distract the reader by shifting attention from the dialogue to the tag.'],
+['Exp','How is dialogue shown in a play?','Each line is preceded by the speaker’s name (e.g., ROMEO. / JULIET.).'],
+['Exp','Why do novelists include dialogue?','It breaks the monotony of prose and keeps the reader interested.'],
+['App','Identify the type: “He told her he was cheating her, and she replied angrily that she didn’t love him anymore.”','Indirect dialogue.']]},
+{id:'l2',title:'Lecture 2 · Critical Thinking Basics',items:[
+['Def','What is decision-making?','A thoughtful process of choosing among a variety of options for acting or thinking.'],
+['Exp','Why does good decision-making depend on critical thinking?','Critical thinking breaks argumentation into its parts so its validity and strength can be evaluated; it entails effective communication, problem-solving and a commitment to overcome egocentrism and sociocentrism.'],
+['Def','Define critical thinking.','The ability to think in an organized, rational way to understand connections between ideas or facts: “thinking about thinking”, i.e. identifying, analyzing, then fixing flaws in the way we think.'],
+['Exp','List the seven critical thinking steps.','(1) Identify the problem or question; (2) gather data, opinions and arguments; (3) analyze and evaluate the data; (4) identify assumptions; (5) establish significance; (6) make a decision or reach a conclusion; (7) present or communicate.'],
+['Exp','Describe four characteristics of a critical thinker.','Raises vital questions clearly and precisely; gathers and assesses relevant information and tests conclusions against standards; thinks open-mindedly, assessing assumptions and consequences; communicates effectively to solve complex problems.'],
+['Def','Define argumentation, coercion, debate and ethics.','Argumentation: reason-giving to justify acts, beliefs, attitudes and values. Coercion: threat or use of force. Debate: inquiry and advocacy seeking a reasoned judgment on a proposition. Ethics: constructs that guide decisions by setting standards of behavior.'],
+['Def','What are “good reasons”?','Reasons that are psychologically compelling for a given audience and make further inquiry unnecessary and redundant, justifying a decision to affirm or reject a proposition.'],
+['Cmp','Persuasive communication vs propaganda.','Persuasion aims to influence acts, beliefs, attitudes and values. Propaganda is persuasion by a group in a sustained, organized, multi-media campaign aimed at a mass audience.'],
+['Def','What is teleological ethics?','A result-oriented approach that judges an action by its good or bad consequences.'],
+['Exp','Why study the history of critical thinking?','To see how far societies foster or hinder it; to give the concept life; to show it is part of human evolution and survival in an increasingly complex future.'],
+['Exp','Who are the three most influential Greek philosophers, and where does critical thinking trace back to?','Socrates, Plato and Aristotle; its roots go back to Socrates.'],
+['Exp','Discuss six reasons why critical thinking is significant.','It deals with change; improves language and presentation skills; promotes creativity; supports self-reflection; is the foundation of science; fosters independence.'],
+['Exp','How does critical thinking promote creativity?','New ideas must also be useful and relevant; critical thinking evaluates, selects and modifies them.'],
+['Exp','How does critical thinking foster independence?','Learners make sense of the world from experience and observation, make informed decisions, gain confidence and learn from mistakes.'],
+['T/F','Critical thinking is only about finding faults in others’ arguments.','False. It also involves evaluating our own ideas and fixing flaws in our own thinking.']]},
+{id:'l3',title:'Lecture 3 · Two Kinds of Reasoning',items:[
+['Def','What is critical thinking (chapter definition)?','A way of deciding whether a claim is true, partially true or false; the evaluation of claims however we come up with them.'],
+['Def','What is a claim?','A statement, something said or written to convey information or express an opinion or belief, that is either true or false.'],
+['App','“Columbus is the most populous city in Ohio”: true or false?','True. “Columbus has the most populous metropolitan area in Ohio” is false (Cleveland’s is bigger).'],
+['Exp','Give three kinds of claims that deserve close evaluation.','Important personal decisions (marrying), societal matters (universal health care), the nature of the world (supernatural events).'],
+['Def','What is an issue?','A question raised whenever a claim is called into question: whether the claim is true or not. “Issue” and “question” can be used interchangeably.'],
+['Def','What is an argument?','A reason given for thinking a claim is true; it has two parts, premise(s) and conclusion.'],
+['Def','Define premise and conclusion.','Premise: a claim offered as a reason for believing another claim. Conclusion: the claim the premise is meant to support; it states a position on the issue.'],
+['App','Sam says, “My grandmother died and I had to attend the funeral.” Identify issue, premise, conclusion.','Issue: should Sam be excused for missing class? Premise: his grandmother died and he attended the funeral. Conclusion: Sam should be excused.'],
+['Def','What is a valid (deductive) argument?','One where it is impossible for the premises to be true and the conclusion false.'],
+['App','Explain why “Josh lives in Alaska, therefore Josh lives in the United States” is valid.','It is impossible for him to live in Alaska and not in the US.'],
+['Def','What is a good inductive argument?','One whose true premises raise the probability of the conclusion; it supports but does not prove it.'],
+['App','Explain: “Fulcher lives in Alaska; therefore he uses mosquito repellent.”','Inductive: the premise makes the conclusion more probable, not certain.'],
+['Def','Define deductive reasoning.','Reasoning that starts with a general statement or hypothesis and examines possibilities to reach a specific, logical conclusion.'],
+['Exp','Name the four stages of the deductive research approach with the airline example.','(1) Existing theory: low-cost airlines always have delays; (2) hypothesis: passengers flying low-cost will always be delayed; (3) collect flight data; (4) analyze: 5 of 100 flights not delayed, so the hypothesis is rejected.'],
+['Def','Define inductive reasoning.','Making broad generalizations from specific observations: observe many cases, discern a pattern, generalize, infer a theory.'],
+['Exp','Name the three stages of the inductive approach.','Observation (one low-cost flight is delayed); pattern (20 more are delayed); theory (low-cost airlines always have delays).'],
+['Exp','State the limitation of deduction.','Its conclusions are true only if all premises are true and the terms are clear.'],
+['Exp','State the limitation of induction.','A conclusion can never be proven, but it can be invalidated.'],
+['Cmp','Give two main differences between inductive and deductive reasoning.','Induction develops a theory; deduction tests an existing one. Induction moves from specific to general; deduction from general to specific.'],
+['T/F','Inductive arguments prove their conclusions.','False. They only support them.'],
+['App','“Butte City residents spend a lot of time in the sun; therefore a tanning salon won’t do well.” Type?','Inductive.']]},
+{id:'l3p',title:'Lecture 3 · Inductive/Deductive Practice',items:[
+['App','“All the swans I’ve seen are white; therefore all swans are white.”','Inductive: generalizes from observed cases.'],
+['App','“All men are mortal. Socrates is a man. Therefore Socrates is mortal.”','Deductive: the conclusion must follow.'],
+['App','“Several friends got a raise; therefore everyone at that company gets a raise.”','Inductive: a small sample stretched to a general claim.'],
+['App','“All birds have feathers. A sparrow is a bird. Therefore a sparrow has feathers.”','Deductive: general rule applied to a case.'],
+['App','“I’ve only met nice people in that city; therefore everyone there is nice.”','Inductive: hasty generalization from experience.'],
+['App','“If it rains, the grass will be wet. It is raining. Therefore the grass is wet.”','Deductive: if–then rule applied.'],
+['App','“The last few winters were very cold; therefore next winter will be cold.”','Inductive: a pattern projected forward.'],
+['App','“Every cat I’ve owned was friendly; therefore all cats are friendly.”','Inductive: personal cases to all cats.'],
+['App','“All squares are rectangles. This shape is a square. Therefore it is a rectangle.”','Deductive: category membership.'],
+['App','“All humans need oxygen. Maria is human. Therefore Maria needs oxygen.”','Deductive: general rule applied.'],
+['App','“Every time I eat strawberries my throat itches; therefore I’m allergic.”','Inductive: cause inferred from repeated observation.'],
+['App','“No reptiles have fur. A snake is a reptile. Therefore a snake has no fur.”','Deductive: exclusion rule applied.'],
+['App','“All roses are flowers. This is a rose. Therefore this is a flower.”','Deductive: category membership.'],
+['App','“Students who study in groups tend to get better grades; therefore group study improves grades.”','Inductive: a pattern plus a causal leap.'],
+['App','“All mammals have backbones. A dolphin is a mammal. Therefore a dolphin has a backbone.”','Deductive: general rule applied.'],
+['Exp','Which words often signal induction?','“Tend to”, “every time I’ve seen”, “the last few”, “probably”: generalizing or predicting from observed cases.'],
+['Exp','Why is “several friends got a raise” a weak basis for a general claim?','The sample is too small: a hasty generalization.'],
+['Exp','Why is the group-study argument risky?','It moves from correlation to cause; better students may simply choose to study in groups.'],
+['App','Write your own deductive and inductive argument about social media.','Model: All platforms with age limits must verify age; Platform X has an age limit; so X must verify age (deductive). Every teen I know sleeps late after using TikTok; so TikTok harms teen sleep (inductive).'],
+['Cmp','Can a valid deductive argument with true premises have a false conclusion?','No.']]},
+{id:'l5',title:'Lecture 5 · Clear Thinking & Fallacies',items:[
+['Def','What is clear thinking?','The ability to express ideas simply and straightforwardly, and to analyze statements and follow logical arguments.'],
+['Exp','Why is clear thinking essential?','All intelligent decision-making needs it; from exploring a problem to the final debate, we must guard against obstacles.'],
+['Def','What is a fallacy?','Whately: any unsound mode of arguing which appears to demand our conviction and to be decisive of the question in hand, when in fairness it is not. A subtle, deceptive obstacle to clear thinking.'],
+['Exp','Why are fallacies hard to spot in real arguments?','Easy to detect in isolation, but woven into the context of an argument they go unnoticed unless we are on guard.'],
+['Exp','How does debate protect decision-makers against fallacies?','They can detect fallacies themselves, and opposing advocates are motivated to point them out.'],
+['Exp','Are fallacies always deliberate?','No. Some are used deliberately (e.g., propaganda in an international crisis) and some accidentally by well-meaning people.'],
+['Exp','Name the four types of fallacies.','Evidence, reasoning, language, pseudoarguments.'],
+['Def','What is a fallacy of evidence?','An unsupported assertion presented as a complete argument, showing only the parts of the evidence that fit.'],
+['App','A reviewer calls a musical dull and inept, but the ad quotes only “brilliantly executed … lavish costuming … flashes of inspiration.” Which fallacy?','Fallacy of evidence: selective quotation.'],
+['Exp','Name four fallacies of reasoning.','Hasty generalization, analogy, cause, sign.'],
+['Def','What is a hasty generalization?','A conclusion drawn from insufficient evidence, so it is unsound and unacceptable to decision-makers.'],
+['Def','What is reasoning by analogy?','Comparing two similar cases and inferring that what is true in one is true in the other.'],
+['App','Which question tests an analogy?','“Are there critical differences in the factors compared?” (The American showed differences between Russian and American government.)'],
+['Def','What is causal reasoning?','Identifying the relationship between a cause and its effect (cause-to-effect or effect-to-cause); the cause must be complete, not partial.'],
+['App','Weather-service example: which reasoning, and why only probable?','Causal: low-pressure areas (cause) predict rain (effect); we deal with probability because certainty cannot be established.'],
+['Def','What is reasoning by sign?','Treating an observable sign as an indication of something else, e.g., the Babinski sign indicating disease of the corticospinal pathway.'],
+['Exp','Name four fallacies of language.','Ambiguity, verbalism, loaded language, grammatical structure.'],
+['Def','Define ambiguity, verbalism and loaded language.','Ambiguity: a word or passage can reasonably be read two or more ways. Verbalism: abundant words with little meaning. Loaded language: emotionally charged words used to establish a conclusion without proof.'],
+['Def','What are pseudoarguments?','Fallacies created, by accident or design, by distortion, confusion, manipulation, avoidance of the issue, or substitution of irrelevant matters.'],
+['Exp','List five pseudoargument fallacies.','Offering irrelevancy, arguing in a circle, ignoring the issue, repeating an assertion, structuring a response.'],
+['App','“It’s true because it says so in the report, and the report is right because it’s true.” Which fallacy?','Arguing in a circle.']]},
+{id:'l6',title:'Lecture 6 · Credibility: Claim and Source',items:[
+['Def','What is credibility?','The capability of being believed; commanding belief in the truthfulness or correctness of what one says.'],
+['Def','What is phishing?','A ploy that tricks victims into giving personal details (account and Social Security numbers) through fake e-mails and look-alike Web sites, for identity theft and credit card fraud.'],
+['App','In Dave’s case, what made the fake Citibank site believable, and what should he have done?','It showed the bank’s logo and authentic-looking details. He should have given no credibility to an e-mail asking for personal identifying information via e-mail or a Web site.'],
+['Exp','In which two arenas do we assess credibility?','The claim itself and the claim’s source.'],
+['App','“Ducks communicate by quacking in Morse code” vs “Ducks mate for life.” Explain.','The first lacks initial plausibility whoever says it. The second is credible; belief depends on the source (a bird expert is more believable).'],
+['Exp','Do sources have degrees of credibility?','Yes: sources vary just as claims do. The neighbor’s denial seems credible until it is found he owns a silencer and an untraceable .45.'],
+['App','Why does a friend’s investment tip gain or lose credibility?','More credibility if he invested his own money; less if he earns a substantial commission.'],
+['Def','Interested vs disinterested party.','Interested: stands to gain from our belief in a claim. Disinterested: has no stake either way.'],
+['Exp','How should interested parties be treated?','With much more suspicion, though not all are out to hoodwink us and not all disinterested parties have good information.'],
+['Exp','Give examples of irrelevant grounds people use to judge credibility.','Eye contact, perspiration, nervous laugh, height, loudness, assertiveness, gender, age, ethnicity, accent, mannerisms, clothes.'],
+['Exp','Is occupation a good guide to credibility?','It relates to knowledge or ability, but is a less reliable guide to moral character or truthfulness.'],
+['T/F','A taller, louder person is more credible.','False. These features merely tend to enhance perceived credibility; they are irrelevant.']]},
+{id:'l7',title:'Lecture 7 · Assessing the Claim',items:[
+['Exp','When do claims stand on their own, and when do they fail?','Some are acceptable regardless of source; they fail when they conflict with our own observations or our background knowledge.'],
+['Exp','Why are personal observations our most reliable source?','They are our most direct information about the world, so a claim that conflicts with them is suspect.'],
+['App','Moore has just seen Marquis’s red Mini Cooper; Parker says it is bright blue. What should Moore do, and why?','Reject the claim: it conflicts with his own observation; no special training is needed.'],
+['Exp','List factors that can distort observations.','Tiredness, distraction, worry, emotional upset; bad lighting, noise, speed of events; inexact or faulty instruments.'],
+['Exp','How do beliefs, hopes, fears and expectations affect observation?','They lead us to “see” what we expect: someone told a house has rats sees signs of rats; séance observers report phenomena that do not exist; teachers told a class is brighter rate its work higher.'],
+['Exp','How do personal interests and biases affect perception?','We overlook faults of people we love and exaggerate those we detest; wishing a project to succeed or fail changes the evidence we notice; we draw worst-case implications from tasks we want to avoid.'],
+['Exp','Why is memory a weakness in observation?','Our observations are only as reliable as our memories, which can deceive; critical thinkers remember that what they recall may not be what they observed.'],
+['T/F','Firsthand observations are infallible.','False, but they remain the best source we have.'],
+['Def','What is background information?','The large body of justified beliefs made of facts learned from direct observation and from others; we may not recall where we learned it.'],
+['App','Why do we reject a wild claim we cannot directly disprove?','It conflicts with our well-confirmed background information.'],
+['Def','What is initial plausibility?','A rough assessment of how credible a claim seems, based on how well it fits our background information.'],
+['Exp','What do we do with claims of low initial plausibility?','Lean toward rejecting them unless very strong evidence supports them.'],
+['Exp','Why does broad background information help?','It is hard to evaluate a report on a topic we know nothing about; e.g., economics helps judge deficit warnings, and knowing how Social Security works reveals why calling it a “savings account” is misleading.'],
+['Exp','Summarize the key principles of credibility.','Claims lack credibility to the extent they conflict with observations, experience or background information, or come from non-credible sources; less plausible claims are more extraordinary; interested parties deserve more suspicion.'],
+['Exp','Into what two categories do doubts about a source fall?','Doubts about knowledge or expertise, and doubts about veracity, objectivity and accuracy.'],
+['Exp','How can we judge a person’s knowledge?','By education, experience, accomplishments, reputation and position.'],
+['Exp','When are expert claims most reliable?','When they pertain to the area of expertise and do not conflict with claims of other experts in the same area.']]},
+{id:'l8',title:'Lecture 8 · Persuasion Through Rhetoric',items:[
+['Def','What is rhetoric?','The study of persuasive writing; a broad category of linguistic techniques used to influence beliefs, attitudes and behavior.'],
+['Cmp','Rhetoric vs argument (logical vs psychological force).','An argument gives reasons (logical force); rhetoric moves us psychologically but by itself establishes nothing.'],
+['App','“Still owes over $1,000” vs “owes only a little over $1,000.”','Same fact, different rhetorical force.'],
+['App','“Freedom fighters” vs “dangerous terrorist organization.”','Different impressions created by rhetorical meaning, not different facts.'],
+['Exp','Should we remove rhetoric from arguments or penalize it?','No. Do not deduct points for rhetoric and do not add points for it; screaming or devices do not make an argument stronger.'],
+['Exp','List the groups of rhetorical devices.','Devices I–IV, proof surrogates and repetition, and persuasion using visual images.'],
+['Def','Euphemism.','A neutral or positive expression used instead of one with negative associations (“pre-owned” for “used”; “neutralization” for assassination).'],
+['Def','Dysphemism.','The opposite: used to produce a negative attitude or tone down positive associations (“terrorist” vs “freedom fighter”).'],
+['Exp','Can euphemisms be legitimate?','Yes. Our purpose decides: they can prevent hostility halting discussion and be good manners (“passed on” for a recently widowed person).'],
+['Def','Weaseler.','Linguistic hedging that waters down or removes what a claim asserts and gives the author a way out (“up to five more miles per gallon”).'],
+['Def','Downplayer.','A device that makes someone or something look less important (“so-called doctor”, “just another liberal”).'],
+['Exp','What are the three devices in Rhetorical Devices II and what do they rely on?','Stereotypes, innuendo, loaded questions; all rely on unwarranted assumptions.'],
+['Def','Stereotype.','A generalization or assumption about all members of a group based on an image of the group (women are emotional, Americans are impatient); none could apply to all members.'],
+['Def','Innuendo.','Manipulating conversational expectations and assumptions to hint at something without saying it.'],
+['Def','Loaded question.','A question resting on an unwarranted assumption: “Have you stopped cheating on exams?”'],
+['Exp','Why is “What time is it?” not loaded?','Its assumptions (listener speaks English, can find the time) are innocent and justified.'],
+['Def','Ridicule / sarcasm (the horse laugh).','Ridicule and vicious humor of all kinds used to sway opinion (“They’re really on top of things”).'],
+['Def','Hyperbole.','Extravagant overstatement (“I’m so hungry I could eat all the food here”).'],
+['Exp','What are the two groups in Rhetorical Devices IV?','Rhetorical definitions and explanations; rhetorical analogies and misleading comparisons.'],
+['Def','Proof surrogate.','An expression that suggests evidence or authority without citing it (“informed sources say”, “it’s obvious that”).'],
+['Exp','Why should we question “informed sources say”?','Who are the sources, how do we know they are informed, and how does the speaker know?'],
+['Def','Repetition.','Making the same point over and over to dull critical faculties; a main tool of propaganda, advertising and politics.'],
+['Exp','What must a critical thinker remember about repetition?','Evidence and argument create believability; a claim unlikely on first hearing is no more likely on the hundredth.'],
+['Exp','What is visual persuasion and what affects its power?','Using photos, illustrations and graphics to influence attitudes and behavior; power depends on visual content, graphic style and relationship to copy. Visuals and copy must form one message; a poor graphic can repulse viewers.'],
+['App','Identify: (a) “Lose up to ten pounds a week” (b) “Don’t mind Mr. Pierce; he’s just another liberal” (c) “Experts agree it’s obvious.”','(a) Weaseler; (b) Downplayer/stereotype; (c) Proof surrogate.']]},
+{id:'l9',title:'Lecture 9 · Argumentative Writing',items:[
+['Def','What is an argumentative essay?','Writing that takes a stance on an issue and persuades the reader by presenting a strong argument supported by evidence, after thorough research and analysis of relevant sources.'],
+['Exp','What are the four components of an argumentative essay?','Statement of the issue; statement of one’s position; arguments supporting it; rebuttals of arguments for contrary positions.'],
+['Exp','How should the issue be introduced?','Show it is important or interesting, and state it fairly, not so the writer’s position looks like the only correct one, which makes the reader suspicious.'],
+['Exp','How should position and arguments be stated?','Position clear and brief; arguments succinct but, above all, clear; reasons clearly relevant and either reliable or backed by further arguments.'],
+['Exp','Name the four hints for planning an essay.','Focus; stick to the issue; arrange components in logical sequence; be complete.'],
+['Exp','What does “Focus” mean, and what should be avoided?','State the issue and position at the outset in an engaging way; avoid the trite “In this essay I shall argue that X, Y, Z…” and its repeated summary.'],
+['Exp','What does “Stick to the issue” require?','Every point must either support, illustrate, explain, clarify, elaborate or emphasize the position, or respond to an anticipated objection.'],
+['Exp','What does a logical sequence mean?','Make a point before clarifying it; readers should move between sentences and paragraphs without confusion and be able to outline the essay easily.'],
+['Exp','What does “Be complete” involve?','Accomplish what you set out to, support your position, anticipate objections; define the issue sharply (a narrower topic is easier to cover); closure at every level.'],
+['Cmp','Is a conclusion the same as a summary?','No. Short essays need no summary.'],
+['Exp','List the five good writing practices.','(1) After the first draft, identify issue and position and start by stating them; (2) revise: think of innumerable drafts; (3) have someone read and criticize it; (4) read aloud to catch grammar and punctuation errors; (5) set aside, then return for further revision.'],
+['Exp','Name the five essay types to avoid.','The Windy Preamble; the Stream-of-Consciousness Ramble; the Knee-Jerk Reaction; the Glancing Blow; Let the Reader Do the Work.'],
+['Def','Explain each of them briefly.','Windy Preamble: lengthy introductory remarks that avoid the issue. Ramble: unorganized thoughts in the order they arise. Knee-Jerk: first reaction with no depth. Glancing Blow: addresses the issue obliquely. Let the Reader Do the Work: non sequiturs, abrupt shifts, irrelevant sidetracks.'],
+['Exp','Why avoid biased language about gender, ethnicity, religion or disability?','It is a matter of ethics but also clarity: careless wording is imprecise, may seem biased, hurts credibility and can distort the writer’s own view.'],
+['App','Why is it problematic to mention a person’s race or gender only when they are not a white male?','It treats “normal” as white and male; mention such traits only if relevant.']]},
+{id:'p1',title:'Project 1 · Kidfluencers',items:[
+['Def','What is a social media influencer?','An individual who uses social media platforms to express opinions on brands or products, influencing a captive audience.'],
+['Def','What are “kidfluencers”?','Children with large followings and verified profiles who earn brand endorsement deals (e.g., Walmart, Staples, Mattel), some too young to make their own accounts.'],
+['App','Summarize the case of Samia.','Born into social media; her parents chronicled her arrival from pregnancy (2014); at 4 she has 143,000 Instagram followers and 203,000 YouTube subscribers, with paid promotions for brands like Crayola.'],
+['Exp','Give three pros of kids being influencers.','Unique family experiences, skill-building, financial benefits.'],
+['Exp','Give four cons.','Exploitation, loss of privacy, exposure to harmful content, psychological pressure, disruption of school and healthy social life.'],
+['Exp','Debate motion: “Kids should be social media influencers.” Give one Pro and one Con argument with evidence, and one rebuttal for each.','Answers vary; require issue, position, premise, evidence and rebuttal.'],
+['Exp','What age, if any, is appropriate, and who should decide?','Open opinion question: require reasons.'],
+['App','Which persuasion devices might a brand use through a child influencer?','Proof surrogates, repetition, visual images, euphemism, emotional appeals.'],
+['App','Apply credibility: how trustworthy is a paid child influencer’s product review?','An interested party who gains from belief: view with suspicion.']]}
+];
+/* ===== Embedded participation activities: key = lectureIndex-slideIndex ===== */
+const ACT={
+/* Lecture 1 */
+'0-1':['p','A class meets to decide how to handle a scheduling problem. Everyone shares ideas and nobody is declared a winner. What is this?',['Discussion','Debate'],0,'It is cooperative, informal and has no accepted ending, so it is a discussion.'],
+'0-2':['p','In a debate on “Children should be social media influencers”, a student who disagrees with the motion is on which side?',['Pro','Con'],1,'The Con side does not agree with the statement or idea.'],
+'0-3':['r','Which debating skill is your weakest, and what is one concrete step to improve it?','name one skill from the cards (for example time management) and one action, such as practising the speech with a timer twice this week.'],
+'0-4':['p','Which of these is a rule of dialogue?',['Interrupt when you disagree','Criticize the idea, not the person','Generalize with “we all know”'],1,'Separate criticizing an idea from criticizing the person, and use “I” statements instead of generalizing.'],
+'0-5':['p','“She asked where he had gone.” What kind of dialogue is this?',['Direct','Indirect'],1,'The conversation is summarized without quotation marks, so it is indirect dialogue.'],
+'0-6':['p','Which dialogue tag is the standard one?',['“Hello,” she said.','“Hello,” she beamed.'],0,'Standard tags like “said” and “asked” keep attention on the dialogue; unusual tags distract the reader.'],
+/* Lecture 2 */
+'1-1':['p','Critical thinking is best described as…',['Finding fault with other people','Thinking about thinking: identifying, analyzing and fixing flaws','Memorizing facts'],1,'It is an organized, rational way of understanding connections between ideas, including fixing flaws in our own thinking.'],
+'1-2':['p','Which step comes right after “Analyze and evaluate the data”?',['Identify assumptions','Establish significance','Present'],0,'The order is: identify, gather, analyze, identify assumptions, establish significance, conclude, present.'],
+'1-3':['r','Think of a recent decision. Which critical-thinker trait did you use, or miss?','choose one trait (asking vital questions, weighing information, open-mindedness, communicating) and say how it showed up, or how it would have changed the choice.'],
+'1-4':['p','An approach that judges an act by its good or bad consequences is…',['Teleological ethics','Coercion','Propaganda'],0,'Teleological ethics is result-oriented.'],
+'1-5':['p','The roots of critical thinking are traceable to…',['Socrates','A modern psychologist','Nobody in particular'],0,'The lecture traces the roots to Socrates, with Plato and Aristotle among the most influential Greek philosophers.'],
+'1-6':['p','Which is NOT one of the reasons critical thinking matters?',['It promotes creativity','It guarantees you are always right','It is the foundation of science'],1,'Critical thinking improves judgment; it does not guarantee we are always right.'],
+/* Lecture 3 */
+'2-1':['p','“Should Sam be excused for missing class?” is the…',['Issue','Premise','Conclusion'],0,'An issue is simply the question of whether a claim is true or not.'],
+'2-2':['p','Reasoning that moves from specific observations to a general theory is…',['Deductive','Inductive'],1,'Induction moves specific to general and develops theories.'],
+'2-3':['p','In the airline example, 5 of 100 low-cost flights are not delayed. What follows?',['The hypothesis is rejected','The hypothesis is proved','The theory is confirmed'],0,'The hypothesis said they would always be delayed, so any on-time flight rejects it.'],
+/* Lecture 5 */
+'3-1':['p','An advert quotes only the flattering fragments of a bad review. Which family of fallacy?',['Fallacy of evidence','Fallacy of language','Pseudoargument'],0,'Partial evidence is presented as if it were complete.'],
+'3-2':['p','Which is NOT one of the four families of fallacies?',['Evidence','Reasoning','Ethics','Language'],2,'The four families are evidence, reasoning, language and pseudoarguments.'],
+'3-3':['p','“Every teacher I met was strict, so all teachers are strict.”',['Hasty generalization','Sign','Analogy'],0,'The conclusion rests on insufficient evidence.'],
+'3-4':['p','“It’s true because the report says so, and the report is right because it’s true.”',['Arguing in a circle','Ambiguity','Verbalism'],0,'The conclusion is used to support itself.'],
+/* Lecture 6 */
+'4-1':['r','What two warning signs should Dave have noticed in the e-mail?','it asked for personal identifying information through an e-mail link and a Web site, and it pressed him with an unverified account problem. He should have contacted the bank directly.'],
+'4-2':['p','Which claim lacks initial plausibility whoever says it?',['Ducks quack in Morse code','Ducks mate for life'],0,'The first fails on its own; the second depends on the source.'],
+'4-3':['p','A friend recommends an investment and will earn a large commission from it. He is…',['An interested party: be more suspicious','A disinterested party: trust him more','An expert, so accept it'],0,'He stands to gain from our belief, so treat the claim with more suspicion.'],
+'4-4':['p','Which is a relevant ground for judging a person’s credibility?',['A loud, confident voice','Education and experience','An accent'],1,'Education, experience, accomplishments, reputation and position bear on knowledge; voice and accent do not.'],
+/* Lecture 7 */
+'5-1':['p','You saw a red car. A friend says it is blue. Best response?',['Accept it: friends are honest','Reject it: it conflicts with my observation','Flip a coin'],1,'A claim that conflicts with our own observation is subject to serious doubt.'],
+'5-2':['p','Our observations are only as reliable as our…',['Memories','Clothes','Accents'],0,'Memory can be deceptive, so what we recall may not be what we observed.'],
+'5-3':['p','A claim that conflicts with well-confirmed background information has…',['High initial plausibility','Low initial plausibility','No plausibility question at all'],1,'Lean towards rejecting it unless very strong evidence is produced.'],
+'5-4':['r','Name a claim you recently heard and rated as unlikely. Which of the three sliders explains why?','state the claim, then say whether it conflicted with what you saw, with your background information, or came from a weak source.'],
+'5-5':['p','Doubts about a source fall into two groups: knowledge or expertise, and…',['Veracity, objectivity and accuracy','Age and accent','Clothing and occupation'],0,'Is the source honest, unbiased and precise?'],
+/* Lecture 8 */
+'6-1':['p','Adding emotional wording to an argument makes it…',['No stronger logically','Logically stronger','Automatically fallacious'],0,'Do not add points for rhetoric, and do not deduct them either.'],
+'6-2':['p','“It’s obvious that the policy is best.” Which device?',['Proof surrogate','Weaseler','Hyperbole'],0,'It suggests proof or authority without offering any.'],
+'6-3':['p','Saying “passed on” rather than “dead” to someone recently widowed is…',['A legitimate euphemism','A dysphemism','Hyperbole'],0,'Purpose decides: euphemisms can be good manners and keep discussion going.'],
+/* Lecture 9 */
+'7-1':['p','Which is NOT one of the four components of an argumentative essay?',['Statement of the issue','Rebuttal of contrary arguments','A long personal biography'],2,'The four are: issue, position, supporting arguments and rebuttals.'],
+'7-2':['r','Write one engaging sentence that states the issue and your position on “Should kids be influencers?” without “In this essay I shall argue…”.','“Children now sell cereal to millions of followers, and the question is whether childhood should be a brand.” Note that it names the issue and hints at a position.'],
+'7-3':['p','Which writing practice is recommended?',['Read the essay aloud to catch errors','Submit the first draft','Avoid feedback from others'],0,'Reading aloud helps detect grammar and punctuation problems your eyes missed.'],
+'7-4':['p','Asked about the health benefits of cycling, a writer spends three paragraphs on its history. Which essay type?',['The Glancing Blow','The Windy Preamble','The Knee-Jerk Reaction'],0,'The issue is addressed only obliquely.'],
+'7-5':['p','When is it appropriate to mention a person’s race, gender or ethnicity?',['Always','Only when it is relevant','Only when the person is not a white male'],1,'Mention it only if it matters to the point; otherwise it reinforces the assumption of a “normal” group.'],
+/* Project 1 */
+'8-1':['r','Would you want to be a paid influencer? State your claim and give one reason.','claim, reason, and one possible objection, for example: “No, because constant posting would cost me privacy. Some would say the money justifies it, but money does not repair lost privacy.”'],
+'8-2':['p','A brand pays a child influencer to praise its nuggets. How credible is the praise?',['Fully credible','Doubtful: an interested party','Impossible to judge'],1,'The influencer gains from our belief, so view the claim with suspicion.'],
+'8-3':['r','Pick one of the questions above and answer it in two sentences with a reason.','a clear position, then a reason. Check: is your reason relevant, and have you anticipated an objection?'],
+'8-4':['p','An influencer repeats the same slogan in every post. Which device?',['Repetition','Innuendo','Dysphemism'],0,'Repeating a point dulls our critical faculties but adds no evidence.']
+};
+const PART=SV.part;
+const ACTKEYS=Object.keys(ACT);
+const doneCount=()=>ACTKEYS.filter(k=>PART[k]).length;
+const lecActs=i=>ACTKEYS.filter(k=>k.startsWith(i+'-'));
+function actHTML(key){const a=ACT[key];if(!a)return '';const st=PART[key];
+  if(a[0]==='p'){return `<section class="act" data-key="${key}" aria-label="Your turn"><div class="acthd"><span class="tag">${L('Your turn','دورك')}</span><span class="note">${L('Poll: choose an answer to see feedback','استطلاع: اختر إجابة لترى التغذية الراجعة')}</span></div><p class="qtext">${a[1]}</p><div class="opts">${a[2].map((o,k)=>`<button class="opt${st?(k===a[3]?' right':(k===st.c?' wrong':'')):''}" data-k="${k}"${st?' disabled':''}>${o}</button>`).join('')}</div><div class="why"${st?'':' hidden'}>${st?`<b>${st.c===a[3]?L('Correct.','صحيح.'):L('Not quite.','ليست دقيقة.')}</b> ${a[4]}`:''}</div></section>`;}
+  return `<section class="act" data-key="${key}" aria-label="Your turn"><div class="acthd"><span class="tag">${L('Your turn','دورك')}</span><span class="note">${L('Reflect: write a short answer, then compare','تأمّل: اكتب إجابة قصيرة ثم قارن')}</span></div><p class="qtext">${a[1]}</p><textarea aria-label="Your answer" placeholder="${L('Type your answer here…','اكتب إجابتك هنا…')}"${st?' readonly':''}>${st?esc(st.t):''}</textarea><div style="margin-top:12px"><button class="btn" data-show${st?' hidden':''}>${L('Show model answer','اعرض الإجابة النموذجية')}</button></div><div class="model"${st?'':' hidden'}><b>${L('Model','النموذج')}</b><br>${a[2]}</div></section>`;}
+const WB=[
+{id:'l1',title:'Lecture 1 · Discussion & Debate',items:[
+['Discussion','مناقشة','Talking with others and sharing ideas or opinions, usually cooperatively','التحدث مع الآخرين وتبادل الأفكار والآراء، غالباً بروح تعاونية'],
+['Debate','مناظرة / مناقشة جدلية','An organized contest of ideas between two opposing sides','تنافس منظم بين الأفكار بين طرفين متعارضين'],
+['Pro (side)','الجانب المؤيد','The side that agrees with the statement','الطرف الذي يوافق على الفكرة المطروحة'],
+['Con (side)','الجانب المعارض','The side that disagrees with the statement','الطرف الذي يعارض الفكرة المطروحة'],
+['Rebuttal','رد / دحض','A counter-argument answering the opposing side','حجة مضادة للرد على الطرف الآخر'],
+['Persuade','يُقنع','To convince someone to accept a view or act','حمل الآخرين على تقبّل رأي أو القيام بفعل'],
+['Cooperative','تعاوني','Working together toward shared understanding','العمل معاً لتحقيق فهم مشترك'],
+['Competitive','تنافسي','Aiming to win over an opponent','يهدف إلى الفوز على الخصم'],
+['Active listening','الاستماع الفعّال','Attentively hearing and responding to a speaker','الإصغاء بانتباه والتفاعل مع المتحدث'],
+['Dialogue','حوار','A conversation between two or more people on a topic','محادثة بين شخصين أو أكثر حول موضوع ما'],
+['General dialogue','حوار عام','Free expression of ideas on a topic in any setting','تعبير حر عن الأفكار في أي مكان وزمان'],
+['Direct dialogue','حوار مباشر','Speakers’ exact words in quotation marks','كلمات المتحدثين نصاً بين علامات اقتباس'],
+['Indirect dialogue','حوار غير مباشر','A summary of a conversation without quotation','تلخيص المحادثة دون اقتباس مباشر'],
+['Dialogue tag','عبارة إسناد الحوار','A phrase (e.g., “she said”) attributing a line to a speaker','عبارة مثل «قالت» تنسب الكلام إلى المتحدث'],
+['“I” statement','عبارة بضمير المتكلم','Speaking from one’s own view without generalizing','التحدث من وجهة نظر الفرد دون تعميم'],
+['Open-ended question','سؤال مفتوح','A question that needs more than yes or no','سؤال لا تكفي للإجابة عنه كلمة «نعم» أو «لا»'],
+['Interrupt','يقاطع','To break in while someone is speaking','التدخل أثناء حديث الآخر']]},
+{id:'l2',title:'Lecture 2 · Critical Thinking Basics',items:[
+['Decision-making','اتخاذ القرار','Thoughtfully choosing among options for acting or thinking','الاختيار المتأني بين بدائل التفكير أو التصرف'],
+['Critical thinking','التفكير الناقد','Thinking in an organized, rational way; evaluating claims; “thinking about thinking”','التفكير المنظم والعقلاني وتقييم الادعاءات؛ «التفكير في التفكير»'],
+['Argumentation','الحِجاج (بناء الحجج)','Reason-giving to justify acts, beliefs, attitudes and values','تقديم الأسباب لتبرير الأفعال والمعتقدات والاتجاهات والقيم'],
+['Coercion','الإكراه','The threat or use of force','التهديد باستخدام القوة أو استخدامها'],
+['Ethics','الأخلاقيات','Standards that guide how we ought to act','معايير توجه سلوكنا وقراراتنا'],
+['Teleological ethics','الأخلاق الغائية','Judging actions by their good or bad consequences','الحكم على الأفعال بنتائجها الحسنة أو السيئة'],
+['Good reasons','أسباب وجيهة','Reasons compelling enough to make further inquiry unnecessary','أسباب مقنعة تجعل مزيداً من البحث غير ضروري'],
+['Persuasive communication','التواصل الإقناعي','Communication meant to influence acts, beliefs, attitudes and values','تواصل يهدف إلى التأثير في أفعال الآخرين ومعتقداتهم وقيمهم'],
+['Propaganda','الدعاية','Sustained, organized, multi-media persuasion aimed at a mass audience','إقناع منظم ومستمر عبر وسائل متعددة موجه إلى جمهور واسع'],
+['Egocentrism','التمركز حول الذات','Viewing things only from one’s own perspective','رؤية الأمور من منظور الذات فقط'],
+['Sociocentrism','التمركز حول الجماعة','Viewing things only from one’s group’s perspective','رؤية الأمور من منظور الجماعة فقط'],
+['Assumption','افتراض','An unstated belief taken for granted','اعتقاد ضمني يُسلَّم به دون إثبات'],
+['Significance','الأهمية / الدلالة','The importance or meaning of information','أهمية المعلومة أو دلالتها'],
+['Conclusion (decision)','استنتاج / خلاصة','The judgment reached after weighing evidence','الحكم الذي يُتوصل إليه بعد تقييم الأدلة']]},
+{id:'l3',title:'Lecture 3 · Claims & Two Kinds of Reasoning',items:[
+['Claim (statement)','ادعاء / عبارة خبرية','A statement that is either true or false','عبارة تحتمل الصدق أو الكذب'],
+['Issue','قضية / مسألة','A question about whether a claim is true','سؤال حول صحة ادعاء ما'],
+['Argument','حجة','A reason given for thinking a claim is true','سبب يُقدَّم للاعتقاد بصحة ادعاء'],
+['Premise','مقدمة','A claim offered as a reason for another claim','ادعاء يُقدَّم كسبب لادعاء آخر'],
+['Conclusion (of argument)','نتيجة','The claim the premises support; a position on the issue','الادعاء الذي تدعمه المقدمات؛ موقف من القضية'],
+['Deductive reasoning','الاستدلال الاستنباطي','From a general statement to a specific, logical conclusion','الانتقال من قاعدة عامة إلى نتيجة خاصة منطقية'],
+['Inductive reasoning','الاستدلال الاستقرائي','From specific observations to broad generalizations','الانتقال من ملاحظات محددة إلى تعميمات واسعة'],
+['Valid argument','حجة صحيحة منطقياً','Premises cannot be true while the conclusion is false','يستحيل أن تصدق مقدماتها وتكذب نتيجتها'],
+['Hypothesis','فرضية','A testable statement derived from a theory','عبارة قابلة للاختبار مشتقة من نظرية'],
+['Theory','نظرية','An explanation developed from observed patterns','تفسير يُبنى على أنماط ملاحظة'],
+['Generalization','تعميم','A general claim drawn from specific cases','ادعاء عام مستمد من حالات محددة'],
+['Probability','احتمالية','The likelihood that a conclusion is true','مدى احتمال صحة النتيجة'],
+['Pattern','نمط','A regularity discerned across observations','انتظام يُلاحظ عبر عدة ملاحظات'],
+['Reject / support (hypothesis)','يرفض / يدعم (الفرضية)','Data shows a hypothesis is false / consistent','تبيّن البيانات أنها خاطئة / متسقة معها']]},
+{id:'l5',title:'Lecture 5 · Clear Thinking & Fallacies',items:[
+['Clear thinking','التفكير الواضح','Expressing ideas simply and following logical arguments','التعبير عن الأفكار ببساطة وتتبع الحجج المنطقية'],
+['Fallacy','مغالطة','An unsound way of arguing that seems convincing but is not','أسلوب حجاج غير سليم يبدو مقنعاً وهو ليس كذلك'],
+['Obstacle','عائق','Something that blocks clear thinking','ما يعيق التفكير الواضح'],
+['Fallacy of evidence','مغالطة الأدلة','Unsupported assertion or partial evidence presented as complete','ادعاء بلا سند أو أدلة ناقصة تُعرض كأنها كاملة'],
+['Fallacy of reasoning','مغالطة الاستدلال','Flawed inference (hasty generalization, analogy, cause, sign)','خلل في الاستنتاج (تعميم متسرع، قياس، سبب، علامة)'],
+['Fallacy of language','مغالطة اللغة','Distortion through wording (ambiguity, verbalism, loaded language)','تشويه عبر الصياغة (غموض، حشو لفظي، لغة محمّلة)'],
+['Pseudoargument','حجة زائفة','Distorting, avoiding or replacing the issue at hand','تحريف القضية أو تجنبها أو استبدالها بأمر غير ذي صلة'],
+['Hasty generalization','تعميم متسرع','Conclusion from insufficient evidence','استنتاج مبني على أدلة غير كافية'],
+['Analogy','القياس التمثيلي (التشبيه)','Inferring that what is true in one case is true in a similar case','استنتاج أن ما ينطبق على حالة ينطبق على حالة مشابهة'],
+['Causal reasoning','الاستدلال السببي','Identifying a cause and its effect','تحديد العلاقة بين السبب والنتيجة'],
+['Sign reasoning','الاستدلال بالعلامة','Treating a sign as evidence of something else','اعتبار علامة دليلاً على شيء آخر'],
+['Ambiguity','غموض / لبس','A word or passage with two or more reasonable meanings','كلمة أو عبارة تحتمل أكثر من معنى معقول'],
+['Verbalism','لفظية / حشو لفظي','Many words conveying little meaning','كثرة الكلمات مع قلة المعنى'],
+['Loaded language','لغة محمّلة عاطفياً','Emotive words used to reach a conclusion without proof','كلمات مشحونة عاطفياً لبلوغ نتيجة دون إثبات'],
+['Offering irrelevancy','طرح ما لا صلة له','Bringing in matters not germane to the issue','إدخال أمور لا علاقة لها بالقضية'],
+['Arguing in a circle','الدور / الاستدلال الدائري','The conclusion is used to support itself','استخدام النتيجة لإثبات نفسها'],
+['Ignoring the issue','تجاهل القضية','Avoiding the question actually at stake','تجنب السؤال المطروح فعلاً'],
+['Repeating an assertion','تكرار الادعاء','Restating a claim instead of proving it','إعادة ادعاء ما بدل إثباته'],
+['Germane','ذو صلة','Relevant to the matter at hand','وثيق الصلة بالموضوع']]},
+{id:'l67',title:'Lectures 6–7 · Credibility',items:[
+['Credibility','المصداقية','Capability of being believed; truthfulness or correctness','القدرة على أن يُصدَّق القول؛ الصدق أو الصحة'],
+['Phishing','التصيّد الاحتيالي','Fake messages or sites used to steal personal information','رسائل أو مواقع مزيفة لسرقة المعلومات الشخصية'],
+['Identity theft','سرقة الهوية','Stealing someone’s personal data to commit fraud','سرقة بيانات شخص للاحتيال باسمه'],
+['Source','مصدر','The person or origin a claim comes from','الشخص أو الجهة التي صدر عنها الادعاء'],
+['Initial plausibility','المعقولية الأولية','First rough judgment of how believable a claim is','التقدير الأولي لمدى قابلية الادعاء للتصديق'],
+['Interested party','طرف ذو مصلحة','Someone who gains if we believe a claim','من يستفيد إذا صدّقنا ادعاءً ما'],
+['Disinterested party','طرف محايد (بلا مصلحة)','Someone with no stake in our belief','من لا مصلحة له في تصديقنا'],
+['Hoodwink','يخدع / يضلّل','To deceive or trick','الخداع أو التضليل'],
+['Personal observation','الملاحظة الشخصية','What we directly see or experience','ما نراه أو نختبره مباشرة'],
+['Background information','المعلومات الخلفية','Body of justified beliefs from observation and others','مخزون المعتقدات المبررة من الملاحظة ومن الآخرين'],
+['Expert','خبير','A person with special knowledge in a subject','شخص يملك معرفة خاصة في موضوع ما'],
+['Expertise','خبرة / تخصص','Special knowledge or skill in an area','معرفة أو مهارة خاصة في مجال معين'],
+['Veracity','الصدق (النزاهة في قول الحقيقة)','Truthfulness; honesty in reporting facts','الالتزام بقول الحقيقة والأمانة في نقل الوقائع'],
+['Objectivity','الموضوعية','Freedom from personal bias','التحرر من التحيز الشخصي'],
+['Accuracy','الدقة','Correctness of information','صحة المعلومات'],
+['Bias','تحيّز','Personal leaning that distorts judgment','ميل شخصي يشوّه الحكم'],
+['Extraordinary claim','ادعاء استثنائي','A claim with very low plausibility','ادعاء ضعيف المعقولية جداً']]},
+{id:'l8',title:'Lecture 8 · Rhetoric & Persuasion',items:[
+['Rhetoric','الخطابة / البلاغة الإقناعية','Linguistic techniques used to influence beliefs, attitudes and behavior','أساليب لغوية للتأثير في المعتقدات والاتجاهات والسلوك'],
+['Rhetorical force','القوة البلاغية','Psychological pull of wording, without added proof','التأثير النفسي للصياغة دون إضافة دليل'],
+['Logical force','القوة المنطقية','The strength of the reasons an argument gives','قوة الأسباب التي تقدمها الحجة'],
+['Slanter','أسلوب لغوي منحاز','A device that slants a message in one direction','أداة تميل بالرسالة نحو اتجاه معين'],
+['Euphemism','تلطيف (تعبير تلطيفي)','A neutral or positive word replacing a negative one','لفظ محايد أو إيجابي يحل محل لفظ سلبي'],
+['Dysphemism','تقبيح (تعبير تقبيحي)','A negative word replacing a neutral or positive one','لفظ سلبي يحل محل لفظ محايد أو إيجابي'],
+['Weaseler','لفظ مراوغ / تحوّطي','Hedging words that water down a claim','ألفاظ تحوّط تُضعف الادعاء وتتيح التراجع عنه'],
+['Downplayer','أداة تهوين','A device making something seem less important','أداة تجعل الشيء يبدو أقل أهمية'],
+['Stereotype','صورة نمطية','A generalization about all members of a group','تعميم يُطلق على جميع أفراد جماعة'],
+['Innuendo','تلميح / تعريض','Hinting at something without stating it','الإيحاء بشيء دون التصريح به'],
+['Loaded question','سؤال مشحون (مفخّخ)','A question resting on an unwarranted assumption','سؤال يقوم على افتراض غير مبرَّر'],
+['Ridicule / sarcasm','سخرية / تهكّم','Mockery or vicious humor used to sway opinion','استهزاء أو فكاهة لاذعة للتأثير في الرأي'],
+['Hyperbole','مبالغة','Extravagant overstatement','تضخيم مفرط في القول'],
+['Rhetorical definition','تعريف بلاغي','A definition slanted to persuade','تعريف مصاغ بميل لإقناع'],
+['Rhetorical explanation','تفسير بلاغي','An explanation slanted to persuade','تفسير مصاغ بميل لإقناع'],
+['Rhetorical analogy','تشبيه بلاغي','An analogy used to slant a point','تشبيه يُستخدم لتوجيه الرأي'],
+['Misleading comparison','مقارنة مضللة','A comparison that distorts the facts','مقارنة تشوّه الحقائق'],
+['Proof surrogate','بديل الدليل','Wording that hints at evidence without giving it','عبارة توحي بوجود دليل دون ذكره'],
+['Repetition','التكرار','Repeating a point until it seems believable','ترديد فكرة حتى تبدو مقنعة'],
+['Visual persuasion','الإقناع البصري','Using images to influence attitudes and behavior','استخدام الصور للتأثير في الاتجاهات والسلوك'],
+['Copy','النص الإعلاني','The written text accompanying a visual','النص المكتوب المصاحب للصورة'],
+['Denigrate','ينتقص من','To belittle someone’s worth','التقليل من قيمة شخص'],
+['Sway','يؤثر / يميل بـ','To influence opinion','التأثير في الرأي']]},
+{id:'l9',title:'Lecture 9 · Writing & Project 1',items:[
+['Argumentative essay','مقال حجاجي','Essay taking a stance and supporting it with evidence','مقال يتبنى موقفاً ويدعمه بالأدلة'],
+['Stance / position','موقف','The writer’s view on the issue','رأي الكاتب في القضية'],
+['Statement of the issue','عرض القضية','Fair introduction of the question under discussion','تقديم عادل للمسألة محل النقاش'],
+['Rebuttal (in essay)','دحض الحجج المضادة','Answering arguments for the opposite position','الرد على حجج الموقف المخالف'],
+['Objection','اعتراض','A point raised against your position','نقطة تُثار ضد موقفك'],
+['Succinct','موجز','Brief and clear','مختصر وواضح'],
+['Focus','التركيز','Stating issue and position at the outset','بيان القضية والموقف منذ البداية'],
+['Logical sequence','تسلسل منطقي','Ordering ideas so readers can follow','ترتيب الأفكار ليتمكن القارئ من المتابعة'],
+['Closure','اكتمال / إحكام الإغلاق','Completing each sentence, paragraph and essay','إتمام الجملة والفقرة والمقال'],
+['Windy preamble','مقدمة مطوّلة','Long introduction that avoids the issue','مقدمة طويلة تتجنب القضية'],
+['Stream-of-consciousness ramble','ثرثرة غير منظمة (تداعٍ حر)','Unorganized thoughts in random order','أفكار غير منظمة بترتيب عشوائي'],
+['Knee-jerk reaction','ردة فعل متسرعة','First reaction without depth','رد فعل أول دون تعمق'],
+['Glancing blow','معالجة عرضية','Addressing the issue only indirectly','تناول القضية بشكل غير مباشر'],
+['Non sequitur','عدم الاستلزام (استنتاج لا يتبع)','A statement that does not follow from what precedes','عبارة لا تنتج مما سبقها'],
+['Draft / revise','مسودة / يراجع وينقّح','A version of writing / improving it','نسخة من الكتابة / تحسينها'],
+['Biased language','لغة متحيّزة','Wording that reinforces assumptions about groups','صياغة تعزز افتراضات عن فئات معينة'],
+['Kidfluencer','طفل مؤثر','A child with a large social media following who promotes brands','طفل يملك متابعين كثراً يروّج للعلامات التجارية'],
+['Social media influencer','مؤثر على وسائل التواصل','Person who influences an audience’s views on brands','شخص يؤثر في آراء جمهوره تجاه العلامات التجارية'],
+['Endorsement','تزكية / ترويج تجاري','Public support of a product, often paid','تأييد علني لمنتج، غالباً مدفوع'],
+['Exploitation','استغلال','Unfair use of someone for gain','استخدام شخص بشكل غير عادل لتحقيق مكسب'],
+['Privacy','الخصوصية','Freedom from unwanted public attention','التحرر من الأضواء غير المرغوبة']]}
+];
+/* ================= PRACTICE ================= */
+const gtQ=g=>UI==='ar'?GAR.q[g.id]:g.title, gtW=g=>UI==='ar'?GAR.w[g.id]:g.title;
+const PR={tool:'oral',g:'all',hard:false,dir:'en',wmark:false,secs:60,count:10};
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const qAll=()=>QB.flatMap(g=>g.items.map((it,i)=>({id:g.id+':'+i,g:g.id,tag:it[0],q:it[1],a:it[2],lec:gtQ(g)})));
+const wAll=()=>WB.flatMap(g=>g.items.map((it,i)=>({id:g.id+':'+i,g:g.id,en:it[0],ar:it[1],de:it[2],da:it[3],lec:gtW(g)})));
+const qPool=()=>qAll().filter(x=>(PR.g==='all'||x.g===PR.g)&&(!PR.hard||SV.hq[x.id]));
+const wPool=()=>wAll().filter(x=>(PR.g==='all'||x.g===PR.g)&&(!PR.wmark||SV.hw[x.id]));
+let tim=null;const stopTim=()=>{if(tim){clearInterval(tim);tim=null;}};
+const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+const empty=()=>`<div class="empty">${L('No items match this scope. Choose another lecture or switch off the marked-only option.','لا توجد عناصر ضمن هذا النطاق. اختر محاضرة أخرى أو أوقف خيار «المُعلَّم فقط».')}</div>`;
+
+function viewP(){
+  stopTim();
+  const tools=[['oral','Oral exam','امتحان شفهي','timer'],['self','Self-test','اختبار ذاتي','quiz'],['cards','Flashcards','بطاقات المفردات','words'],['debate','Debate builder','منشئ المناظرة','slides']];
+  const scope=PR.tool==='cards'?WB:PR.tool==='debate'?[]:QB;
+  const tot=scope.reduce((n,g)=>n+g.items.length,0);
+  const titleOf=g=>PR.tool==='cards'?(UI==='ar'?GAR.w[g.id]:short(g.title)):(UI==='ar'?GAR.q[g.id]:short(g.title));
+  const lecs=[['all',L('All lectures','كل المحاضرات'),tot]].concat(scope.map(g=>[g.id,titleOf(g),g.items.length]));
+  const seg=(id,arr,cur)=>`<div class="seg" id="${id}" role="group">${arr.map(a=>`<button data-v="${a[0]}" aria-pressed="${String(cur)===String(a[0])}">${a[1]}</button>`).join('')}</div>`;
+  const sw=(id,on,label)=>`<span class="tog"><button class="switch sm" role="switch" aria-checked="${on}" id="${id}" aria-label="${label}"><i></i></button>${label}</span>`;
+  let opts='';
+  if(PR.tool==='oral')opts=`<p class="fh">${L('Time per question','الوقت لكل سؤال')}</p>${seg('psecs',[[30,'30s'],[60,'60s'],[90,'90s'],[120,'120s']],PR.secs)}${sw('phard',PR.hard,L('Marked questions only','الأسئلة المُعلَّمة فقط'))}`;
+  if(PR.tool==='self')opts=`<p class="fh">${L('Questions in the test','عدد الأسئلة')}</p>${seg('pcount',[[5,'5'],[10,'10'],[20,'20']],PR.count)}${sw('phard',PR.hard,L('Marked questions only','الأسئلة المُعلَّمة فقط'))}`;
+  if(PR.tool==='cards')opts=`<p class="fh">${L('Card front','وجه البطاقة')}</p>${seg('pdir',[['en','English → ع'],['ar','ع → English']],PR.dir)}${sw('pmark',PR.wmark,L('Marked words only','المفردات المُعلَّمة فقط'))}`;
+  const nq=Object.keys(SV.hq).length,nw=Object.keys(SV.hw).length;
+  const marks=PR.tool==='cards'?nw:nq;
+  app.innerHTML=`<div class="bankwrap">${sideHTML(`<p class="fh">${L('Tool','الأداة')}</p><div class="fl" id="ptool">${tools.map(t=>`<button class="fb" data-t="${t[0]}" aria-pressed="${PR.tool===t[0]}"><span>${L(t[1],t[2])}</span></button>`).join('')}</div>${opts}${scope.length?`<p class="fh">${L('Scope','النطاق')}</p><div class="fl" id="pg">${lecs.map(c=>`<button class="fb" data-g="${c[0]}" aria-pressed="${PR.g===c[0]}"><span>${c[1]}</span><b>${c[2]}</b></button>`).join('')}</div>`:''}${PR.tool!=='debate'?`<p class="note" id="pmarks">${L('Marked for review','مُعلَّم للمراجعة')}: <b>${marks}</b></p><button class="reset" id="pclear">${L('Clear marks','مسح العلامات')}</button>`:''}`)}<section class="fmain bank" id="pmain"></section></div>`;
+  wireToggle();
+  $$('#ptool .fb').forEach(b=>b.onclick=()=>{PR.tool=b.dataset.t;PR.g='all';PR.hard=false;PR.wmark=false;OR.q=null;ST.run=false;viewP();});
+  $$('#pg .fb').forEach(b=>b.onclick=()=>{PR.g=b.dataset.g;viewP();});
+  const sg=(id,fn)=>{$$('#'+id+' button').forEach(b=>b.onclick=()=>{fn(b.dataset.v);viewP();});};
+  sg('psecs',v=>{PR.secs=+v;OR.q=null;});sg('pcount',v=>{PR.count=+v;ST.run=false;});sg('pdir',v=>{PR.dir=v;});
+  const ph=$('#phard');if(ph)ph.onclick=()=>{PR.hard=!PR.hard;OR.q=null;ST.run=false;viewP();};
+  const pm=$('#pmark');if(pm)pm.onclick=()=>{PR.wmark=!PR.wmark;viewP();};
+  const pc=$('#pclear');if(pc)pc.onclick=()=>{if(PR.tool==='cards')SV.hw={};else SV.hq={};save();viewP();};
+  drawP();}
+const updMarks=()=>{const e=$('#pmarks b');if(e)e.textContent=Object.keys(PR.tool==='cards'?SV.hw:SV.hq).length;};
+function drawP(){({oral:oralView,self:selfView,cards:cardsView,debate:debateView})[PR.tool]();}
+
+/* ---------- oral exam ---------- */
+const OR={q:null,left:0,queue:[],rev:false};
+function oralView(){$('#pmain').innerHTML=`<h1>${L('Oral exam practice','تدريب على الامتحان الشفهي')}</h1><p class="lede">${L('Draw a question, answer out loud before the clock runs out, then reveal the model answer and rate yourself.','اسحب سؤالاً، وأجب بصوت مسموع قبل انتهاء الوقت، ثم اعرض الإجابة النموذجية وقيّم نفسك.')}</p><div id="ocard"></div>`;
+  if(OR.q)paintOral();else startOral();}
+function startOral(){$('#ocard').innerHTML=`<button class="btn big-btn" id="odraw">${ico('shuffle',26)} ${L('Draw a question','اسحب سؤالاً')}</button><p class="note" style="margin-top:14px">${L('Questions available','الأسئلة المتاحة')}: <b>${qPool().length}</b></p>`;$('#odraw').onclick=drawOral;}
+function drawOral(){const pool=qPool();if(!pool.length){$('#ocard').innerHTML=empty();return;}
+  OR.queue=OR.queue.filter(id=>pool.some(p=>p.id===id));if(!OR.queue.length)OR.queue=shuf(pool.map(p=>p.id));
+  const id=OR.queue.pop();OR.q=pool.find(p=>p.id===id);OR.left=PR.secs;OR.rev=false;paintOral();}
+function paintOral(){const q=OR.q;stopTim();
+  $('#ocard').innerHTML=`<div class="ocard"><div class="otop"><span class="tag">${tagLabel(q.tag)}</span><span class="note">${q.lec}</span><span class="clock" id="clock">${fmt(OR.left)}</span></div><div class="tbar"><i id="tfill" style="width:${OR.left/PR.secs*100}%"></i></div><p class="oq">${q.q}</p>
+  <div class="oact" id="oa1"${OR.rev?' hidden':''}><button class="btn" id="orev">${L('Reveal answer','اعرض الإجابة')}</button><button class="btn alt" id="oskip">${L('Skip','تخطَّ')}</button></div>
+  <div class="model" id="omodel"${OR.rev?'':' hidden'}><b>${L('Model answer','الإجابة النموذجية')}</b><br>${q.a}</div>
+  <div class="oact" id="orate"${OR.rev?'':' hidden'}><button class="btn" data-r="1">${ico('check',22)} ${L('Got it','أتقنتها')}</button><button class="btn alt" data-r="0">${ico('star',22)} ${L('Needs work','تحتاج مراجعة')}</button></div></div>`;
+  $('#orev').onclick=()=>{OR.rev=true;stopTim();$('#oa1').hidden=true;$('#omodel').hidden=false;$('#orate').hidden=false;};
+  $('#oskip').onclick=drawOral;
+  $$('#orate [data-r]').forEach(b=>b.onclick=()=>{if(b.dataset.r==='1')delete SV.hq[q.id];else SV.hq[q.id]=1;save();updMarks();drawOral();});
+  if(!OR.rev&&OR.left>0){tim=setInterval(()=>{OR.left--;const c=$('#clock');if(!c){stopTim();return;}
+    $('#tfill').style.width=Math.max(0,OR.left/PR.secs*100)+'%';
+    if(OR.left<=0){stopTim();c.textContent=L('Time’s up','انتهى الوقت');c.classList.add('up');}else c.textContent=fmt(OR.left);},1000);}}
+
+/* ---------- self-test ---------- */
+const ST={run:false,items:[],i:0,ok:0,hard:[],rev:false,end:false};
+function selfView(){const m=$('#pmain');
+  m.innerHTML=`<h1>${L('Self-test','اختبار ذاتي')}</h1><p class="lede">${L('Work through a set of questions. Reveal each model answer, then mark whether you got it or need more work.','أجب عن مجموعة من الأسئلة. اعرض الإجابة النموذجية لكل سؤال، ثم حدّد هل أتقنتها أم تحتاج إلى مراجعة.')}</p><div id="stbox"></div>`;
+  if(!ST.run){const n=qPool().length;$('#stbox').innerHTML=n?`<button class="btn big-btn" id="stgo">${ico('right',26)} ${L('Start test','ابدأ الاختبار')} (${Math.min(PR.count,n)})</button><p class="note" style="margin-top:14px">${L('Questions available','الأسئلة المتاحة')}: <b>${n}</b></p>`:empty();
+    const g=$('#stgo');if(g)g.onclick=()=>startSelf(shuf(qPool()).slice(0,PR.count));}
+  else paintSelf();}
+function startSelf(items){ST.run=true;ST.items=items;ST.i=0;ST.ok=0;ST.hard=[];ST.rev=false;paintSelf();}
+function paintSelf(){const b=$('#stbox'),n=ST.items.length;
+  if(ST.i>=n){b.innerHTML=`<div class="slab" style="text-align:center;padding:1.6em"><h3>${L('Your result','نتيجتك')}</h3><p class="big">${ST.ok} / ${n}</p></div>
+   ${ST.hard.length?`<h3 style="margin:22px 0 10px;font-size:1.4em;font-weight:900">${L('To review','للمراجعة')} (${ST.hard.length})</h3>${ST.hard.map(q=>`<div class="q open"><div class="qh" style="grid-template-columns:1fr"><span class="qt">${q.q}</span></div><div class="qa">${q.a}</div></div>`).join('')}`:`<p class="lead" style="margin-top:18px">${L('Nothing to review. Well done.','لا شيء للمراجعة. أحسنت.')}</p>`}
+   <div class="oact" style="margin-top:18px">${ST.hard.length?`<button class="btn" id="stretry">${ico('redo',22)} ${L('Retry the marked ones','أعد المُعلَّمة')}</button>`:''}<button class="btn alt" id="stnew">${L('New test','اختبار جديد')}</button></div>`;
+    const r=$('#stretry');if(r)r.onclick=()=>startSelf(shuf(ST.hard));$('#stnew').onclick=()=>{ST.run=false;selfView();};return;}
+  const q=ST.items[ST.i];
+  b.innerHTML=`<div class="qprog"><i style="width:${ST.i/n*100}%"></i></div><p class="qn">${L('Question','السؤال')} ${ST.i+1} ${L('of','من')} ${n} · ${L('Correct so far','الصحيح حتى الآن')} ${ST.ok}</p>
+   <div class="ocard"><div class="otop"><span class="tag">${tagLabel(q.tag)}</span><span class="note">${q.lec}</span></div><p class="oq">${q.q}</p>
+   <div class="oact" id="sa1"${ST.rev?' hidden':''}><button class="btn" id="srev">${L('Reveal answer','اعرض الإجابة')}</button></div>
+   <div class="model" id="smodel"${ST.rev?'':' hidden'}><b>${L('Model answer','الإجابة النموذجية')}</b><br>${q.a}</div>
+   <div class="oact" id="srate"${ST.rev?'':' hidden'}><button class="btn" data-r="1">${ico('check',22)} ${L('Got it','أتقنتها')}</button><button class="btn alt" data-r="0">${ico('star',22)} ${L('Needs work','تحتاج مراجعة')}</button></div></div>`;
+  $('#srev').onclick=()=>{ST.rev=true;$('#sa1').hidden=true;$('#smodel').hidden=false;$('#srate').hidden=false;};
+  $$('#srate [data-r]').forEach(x=>x.onclick=()=>{if(x.dataset.r==='1'){ST.ok++;delete SV.hq[q.id];}else{ST.hard.push(q);SV.hq[q.id]=1;}save();updMarks();ST.i++;ST.rev=false;paintSelf();});}
+
+/* ---------- flashcards ---------- */
+const FC={list:[],i:0,flip:false};
+function cardsView(){FC.list=wPool();FC.i=0;FC.flip=false;
+  $('#pmain').innerHTML=`<h1>${L('Word flashcards','بطاقات المفردات')}</h1><p class="lede">${L('Tap the card to flip it. Mark the words you want to review later.','اضغط على البطاقة لتقلبها. علّم المفردات التي تريد مراجعتها لاحقاً.')}</p><div id="fcbox"></div>`;paintCard();}
+function paintCard(){const b=$('#fcbox');if(!FC.list.length){b.innerHTML=empty();return;}
+  const w=FC.list[FC.i],front=PR.dir==='en'?w.en:w.ar,back=PR.dir==='en'?w.ar:w.en;
+  const fa=PR.dir==='ar'?' dir="rtl" lang="ar"':'',ba=PR.dir==='en'?' dir="rtl" lang="ar"':'';
+  b.innerHTML=`<p class="qn">${FC.i+1} / ${FC.list.length} · ${w.lec}</p>
+   <button class="flash${FC.flip?' flipped':''}" id="flash" aria-label="${L('Flip card','اقلب البطاقة')}">${FC.flip?`<span class="fb2"${ba}>${back}</span><span class="fdef">${w.de}</span><span class="fdef" dir="rtl" lang="ar">${w.da}</span>`:`<span class="ff"${fa}>${front}</span><span class="note">${L('Tap to flip','اضغط للقلب')}</span>`}</button>
+   <div class="oact" style="margin-top:18px"><button class="btn alt" id="fprev" aria-label="${L('Previous','السابق')}">${ico('left',22)}</button><button class="btn alt" id="fmark" aria-pressed="${!!SV.hw[w.id]}">${ico('star',22)} ${SV.hw[w.id]?L('Marked','مُعلَّمة'):L('Mark to review','علّم للمراجعة')}</button><button class="btn alt" id="fshuf">${ico('shuffle',22)} ${L('Shuffle','خلط')}</button><button class="btn" id="fnext" aria-label="${L('Next','التالي')}">${ico('right',22)}</button></div>`;
+  $('#flash').onclick=()=>{FC.flip=!FC.flip;paintCard();};
+  $('#fprev').onclick=()=>{FC.i=(FC.i-1+FC.list.length)%FC.list.length;FC.flip=false;paintCard();};
+  $('#fnext').onclick=()=>{FC.i=(FC.i+1)%FC.list.length;FC.flip=false;paintCard();};
+  $('#fshuf').onclick=()=>{FC.list=shuf(FC.list);FC.i=0;FC.flip=false;paintCard();};
+  $('#fmark').onclick=()=>{if(SV.hw[w.id])delete SV.hw[w.id];else SV.hw[w.id]=1;save();updMarks();paintCard();};}
+
+/* ---------- debate builder ---------- */
+const FLAGS=[[/\bobviously\b/i,'“obviously”'],[/it'?s obvious|it’s obvious/i,'“it’s obvious”'],[/everyone knows/i,'“everyone knows”'],[/informed sources/i,'“informed sources”'],[/\bup to\b/i,'“up to”'],[/so-called/i,'“so-called”'],[/just another/i,'“just another”']];
+const wc=s=>(s||'').trim()?(s||'').trim().split(/\s+/).length:0;
+function debateView(){const d=SV.deb;
+  const F=(id,label,rows,ph)=>`<label class="dfield"><span>${label}</span><textarea data-f="${id}" rows="${rows||2}" placeholder="${ph||''}">${esc(d[id]||'')}</textarea></label>`;
+  $('#pmain').innerHTML=`<h1>${L('Debate builder','منشئ المناظرة')}</h1><p class="lede">${L('Plan a Project 1 debate case using the Lecture 9 structure. The checklist updates as you type.','خطّط لحجة مناظرة المشروع الأول وفق بنية المحاضرة التاسعة. تتحدّث القائمة أثناء الكتابة.')}</p>
+  <div class="dgrid"><div class="stack">
+   ${F('motion',L('Motion','الطرح'),2,L('Children should be social media influencers.','يجب أن يكون الأطفال مؤثرين على وسائل التواصل.'))}
+   <label class="dfield"><span>${L('Your side','موقفك')}</span><select data-f="side"><option value="pro"${d.side!=='con'?' selected':''}>${L('Pro (for)','مؤيد')}</option><option value="con"${d.side==='con'?' selected':''}>${L('Con (against)','معارض')}</option></select></label>
+   ${F('issue',L('1 · Statement of the issue (fair and clear)','1 · عرض القضية (بإنصاف ووضوح)'),2)}
+   ${F('pos',L('2 · Your position (clear and brief)','2 · موقفك (واضح وموجز)'),2)}
+   ${[1,2,3].map(n=>F('a'+n,L('3 · Argument '+n,'3 · الحجة '+n),2)+F('e'+n,L('Evidence for argument '+n,'دليل الحجة '+n),1)).join('')}
+   ${F('reb',L('4 · Rebuttal: the strongest opposing argument and your reply','4 · الدحض: أقوى حجة مضادة وردّك عليها'),3)}
+  </div><aside class="stack"><div class="card"><h3>${L('Checklist','قائمة التحقق')}</h3><div id="dchk"></div></div>
+   <div class="card"><h3>${L('Outline','المخطط')}</h3><div id="dout" class="dout"></div><div class="oact" style="margin-top:12px"><button class="btn" id="dcopy">${L('Copy outline','نسخ المخطط')}</button><button class="btn alt" id="dprint">${ico('print',22)} ${L('Print','طباعة')}</button><button class="btn alt" id="dclear">${L('Clear','مسح')}</button></div></div></aside></div>`;
+  $$('[data-f]').forEach(e=>{const h=()=>{SV.deb[e.dataset.f]=e.value;save();checkDeb();};e.oninput=h;e.onchange=h;});
+  $('#dcopy').onclick=e=>copyText($('#dout').innerText,e.currentTarget);
+  $('#dprint').onclick=()=>{try{window.print();}catch(x){}};
+  $('#dclear').onclick=()=>{SV.deb={};save();debateView();};
+  checkDeb();}
+function checkDeb(){const d=SV.deb,all=['motion','issue','pos','a1','e1','a2','e2','a3','e3','reb'].map(k=>d[k]||'').join(' ');
+  const args=[1,2,3].filter(n=>(d['a'+n]||'').trim().length>=10),evid=args.filter(n=>(d['e'+n]||'').trim().length>=6);
+  const flags=FLAGS.filter(f=>f[0].test(all)).map(f=>f[1]);
+  const items=[
+   [(d.issue||'').trim().length>=12,L('Issue stated as a fair, clear question','القضية معروضة بإنصاف ووضوح')],
+   [(d.pos||'').trim().length>=12&&wc(d.pos)<=40,L('Position stated clearly and briefly (40 words or fewer)','الموقف واضح وموجز (40 كلمة فأقل)')],
+   [args.length>=2,L('At least two supporting arguments','حجتان داعمتان على الأقل')],
+   [args.length>0&&evid.length===args.length,L('Every argument has evidence','لكل حجة دليل')],
+   [(d.reb||'').trim().length>=12,L('A rebuttal of the opposing side is included','تم تضمين دحض للطرف الآخر')],
+   [!/in this essay/i.test((d.issue||'')+' '+(d.pos||'')),L('No trite “In this essay I shall argue…” opening','لا توجد افتتاحية مكرورة مثل «في هذا المقال سأجادل…»')],
+   [flags.length===0,flags.length?L('Watch the rhetoric: ','انتبه إلى الأساليب البلاغية: ')+flags.join(', '):L('No proof surrogates or weaselers spotted','لا توجد بدائل دليل أو ألفاظ مراوغة')]];
+  $('#dchk').innerHTML=items.map(i=>`<p class="dchk ${i[0]?'ok':'no'}"><span>${ico(i[0]?'check':'star',18)}</span>${i[1]}</p>`).join('')+`<p class="note" style="margin-top:8px">${items.filter(i=>i[0]).length} / ${items.length}</p>`;
+  const side=d.side==='con'?L('Con','معارض'):L('Pro','مؤيد');
+  const lines=[`${L('MOTION','الطرح')}: ${d.motion||'—'}`,`${L('SIDE','الموقف')}: ${side}`,'',`${L('ISSUE','القضية')}: ${d.issue||'—'}`,`${L('POSITION','الموقف المعلن')}: ${d.pos||'—'}`,''].concat([1,2,3].filter(n=>(d['a'+n]||d['e'+n])).map(n=>`${L('ARGUMENT','الحجة')} ${n}: ${d['a'+n]||'—'}\n${L('Evidence','الدليل')}: ${d['e'+n]||'—'}`),['',`${L('REBUTTAL','الدحض')}: ${d.reb||'—'}`]);
+  $('#dout').innerHTML=lines.map(x=>x===''?'<br>':`<p>${esc(x).replace(/\n/g,'<br>')}</p>`).join('');}
+function copyText(txt,btn){const done=()=>{const o=btn.textContent;btn.textContent=L('Copied','تم النسخ');setTimeout(()=>btn.textContent=L('Copy outline','نسخ المخطط'),1600);};
+  const fb=()=>{const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done();}catch(e){}ta.remove();};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fb);}else fb();}
+/* ================= APP ================= */
+const MODES=[['slides','Lectures','المحاضرات','slides'],['quiz','Question Bank','بنك الأسئلة','quiz'],['words','Word Bank','بنك المفردات','words'],['prac','Practice','التدريب','practice']];
+let mode='slides',li=0,si=0;const seen=new Set();
+const app=$('#app');
+const toTop=()=>{try{const st=$('#stage');if(st&&window.innerWidth<=900){st.scrollIntoView({block:'start'});}else{window.scrollTo(0,0);}}catch(e){}};
+const lname=l=>UI==='ar'?LECAR[l.no][0]:l.name, lsub=l=>UI==='ar'?LECAR[l.no][1]:l.sub;
+
+function drawModes(){$('#modes').innerHTML=MODES.map(m=>`<button role="tab" class="mode" data-m="${m[0]}" aria-selected="${mode===m[0]}">${ico(m[3],24)}<span>${L(m[1],m[2])}</span></button>`).join('');
+  $$('.mode').forEach(b=>b.onclick=()=>{stopTim();mode=b.dataset.m;render();toTop();});}
+function render(){drawModes();mode==='slides'?viewLec():mode==='quiz'?viewQ():mode==='words'?viewW():viewP();}
+
+/* ---- lectures ---- */
+function viewLec(){
+  app.innerHTML=`<div class="lec"><nav class="side" aria-label="${L('Lectures','المحاضرات')}">${LEC.map((l,i)=>`<button class="li" data-i="${i}" aria-current="${i===li}"><span class="n">${l.no}</span><span>${lname(l)}<small>${lsub(l)}</small>${lecActs(i).length?`<em class="lp" data-lp="${i}">${lecActs(i).filter(k=>PART[k]).length}/${lecActs(i).length} ${L('activities','أنشطة')}</em>`:''}</span></button>`).join('')}<button class="reset" id="resetAct">${L('Reset activities','إعادة ضبط الأنشطة')}</button></nav><section class="stage" id="stage" aria-live="polite"></section></div>`;
+  $$('.li').forEach(b=>b.onclick=()=>{li=+b.dataset.i;si=0;viewLec();toTop();});
+  const sd=$('.side'),ac=$('.li[aria-current="true"]');if(sd&&ac){sd.scrollTop=Math.max(0,ac.offsetTop-60);sd.scrollLeft=Math.max(0,ac.offsetLeft-20);}
+  $('#resetAct').onclick=()=>{ACTKEYS.forEach(k=>delete PART[k]);save();drawSlide();refreshPart();};
+  drawSlide();}
+function go(d){let n=si+d;
+  if(n<0){if(li===0)return;li--;si=LEC[li].slides.length-1;viewLec();toTop();return;}
+  if(n>=LEC[li].slides.length){if(li===LEC.length-1)return;li++;si=0;viewLec();toTop();return;}
+  si=n;drawSlide();toTop();}
+function drawSlide(){
+  const L0=LEC[li],s=L0.slides[si],st=$('#stage');seen.add(li+'-'+si);
+  const lab=/^\d+$/.test(L0.no)?`${L('Lecture','المحاضرة')} ${L0.no}: ${lname(L0)}`:lname(L0);
+  st.innerHTML=`<div class="slide"><div class="slidehead"><span class="kick">${lab}</span><span class="right"><span class="part" title="${L('Activities completed','الأنشطة المنجزة')}">${L('Participation','المشاركة')} <bdi dir="ltr"><b>${doneCount()}</b> / ${ACTKEYS.length}</bdi></span><span class="count">${si+1} / ${L0.slides.length}</span></span>${si?`<h2>${s.t}</h2>`:''}</div><div class="body">${s.h()}</div>${actHTML(li+'-'+si)}${li===0&&si===0?'<p class="credit">Developed by <b>Halim Faroug A. Elhag</b></p>':''}</div>
+  <div class="nav"><button class="nb" id="prev" aria-label="${L('Previous slide','الشريحة السابقة')}" ${li===0&&si===0?'disabled':''}>${ico('left',30)}</button>
+  <div class="dots">${L0.slides.map((_,k)=>`<button class="dot${k===si?' on':PART[li+'-'+k]?' done':seen.has(li+'-'+k)?' seen':''}" data-k="${k}" aria-label="${L('Go to slide','اذهب إلى الشريحة')} ${k+1}"></button>`).join('')}</div>
+  <button class="nb" id="next" aria-label="${L('Next slide','الشريحة التالية')}" ${li===LEC.length-1&&si===L0.slides.length-1?'disabled':''}>${ico('right',30)}</button></div>`;
+  $('#prev').onclick=()=>go(-1);$('#next').onclick=()=>go(1);
+  $$('.dot').forEach(d=>d.onclick=()=>{si=+d.dataset.k;drawSlide();toTop();});
+  const body=$('.body',st);wireAll(body);if(s.i)s.i(body);wireAct($('.act',st));}
+function refreshPart(){const n=$('.part b');if(n)n.textContent=doneCount();
+  $$('.lp').forEach(e=>{const i=+e.dataset.lp,ks=lecActs(i);e.textContent=ks.filter(k=>PART[k]).length+'/'+ks.length+' '+L('activities','أنشطة');});
+  $$('.dot').forEach(d=>{const k=+d.dataset.k;if(d.classList.contains('on'))return;d.classList.toggle('done',!!PART[li+'-'+k]);});}
+function wireAct(el){if(!el)return;const key=el.dataset.key,a=ACT[key];
+  if(a[0]==='p'){$$('.opt',el).forEach(b=>b.onclick=()=>{if(PART[key])return;const c=+b.dataset.k;PART[key]={c};save();
+    $$('.opt',el).forEach(o=>{const k=+o.dataset.k;o.disabled=true;o.classList.toggle('right',k===a[3]);if(k===c&&c!==a[3])o.classList.add('wrong');});
+    const w=$('.why',el);w.hidden=false;w.innerHTML=`<b>${c===a[3]?L('Correct.','صحيح.'):L('Not quite.','ليست دقيقة.')}</b> ${a[4]}`;refreshPart();});}
+  else{const ta=$('textarea',el),bt=$('[data-show]',el),md=$('.model',el);if(PART[key])return;
+    bt.onclick=()=>{const t=ta.value.trim();if(t.length<8){ta.focus();ta.placeholder=L('Write at least a short sentence first…','اكتب جملة قصيرة على الأقل أولاً…');return;}
+      PART[key]={t};save();ta.readOnly=true;bt.hidden=true;md.hidden=false;refreshPart();};}}
+
+/* ---- side bar helpers (banks + practice) ---- */
+function sideHTML(inner){return `<aside class="fside" id="fside"><button class="ftoggle" id="ftoggle" aria-expanded="false">${ico('search',22)}<span>${L('Filters and search','التصفية والبحث')}</span></button><div class="fbody">${inner}</div></aside>`;}
+function wireToggle(){const b=$('#ftoggle'),s=$('#fside');b.onclick=()=>{const o=s.classList.toggle('open');b.setAttribute('aria-expanded',String(o));};}
+
+/* ---- question bank ---- */
+const qs={g:'all',tag:'All',q:'',all:false};
+const short=t=>t.replace('Lecture ','L').replace(' · ',' ');
+function viewQ(){
+  const total=QB.reduce((n,g)=>n+g.items.length,0);
+  const lecs=[['all',L('All lectures','كل المحاضرات'),total]].concat(QB.map(g=>[g.id,UI==='ar'?GAR.q[g.id]:short(g.title),g.items.length]));
+  app.innerHTML=`<div class="bankwrap">${sideHTML(`<label class="find">${ico('search',22)}<input id="qsearch" type="search" placeholder="${L('Search questions and answers','ابحث في الأسئلة والإجابات')}" aria-label="${L('Search questions','ابحث في الأسئلة')}" value="${esc(qs.q)}"></label>
+  <span class="tog"><button class="switch sm" role="switch" aria-checked="${qs.all}" id="qall" aria-label="${L('Show all answers','إظهار كل الإجابات')}"><i></i></button>${L('Show all answers','إظهار كل الإجابات')}</span>
+  <p class="fh">${L('Lecture','المحاضرة')}</p><div class="fl" id="qg">${lecs.map(c=>`<button class="fb" data-g="${c[0]}" aria-pressed="${qs.g===c[0]}"><span>${c[1]}</span><b>${c[2]}</b></button>`).join('')}</div>
+  <p class="fh">${L('Question type','نوع السؤال')}</p><div class="fl" id="qt">${TAGS.map(t=>`<button class="fb" data-t="${t[0]}" aria-pressed="${qs.tag===t[0]}"><span>${L(t[1],t[2])}</span></button>`).join('')}</div>
+  <button class="reset" id="qprint">${ico('print',20)} ${L('Print / save as PDF','طباعة / حفظ PDF')}</button>`)}
+  <section class="fmain bank"><h1>${L('Question Bank','بنك الأسئلة')}</h1><p class="lede">${total} ${L('questions with model answers, grouped by lecture. Tap a question to reveal its answer.','سؤالاً مع إجابات نموذجية، مرتبة حسب المحاضرة. اضغط على السؤال لتظهر إجابته.')}</p><div id="qlist"></div></section></div>`;
+  wireToggle();
+  $$('#qg .fb').forEach(b=>b.onclick=()=>{qs.g=b.dataset.g;$$('#qg .fb').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));drawQ();});
+  $$('#qt .fb').forEach(b=>b.onclick=()=>{qs.tag=b.dataset.t;$$('#qt .fb').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));drawQ();});
+  $('#qsearch').oninput=e=>{qs.q=e.target.value;drawQ();};
+  $('#qall').onclick=e=>{qs.all=!qs.all;e.currentTarget.setAttribute('aria-checked',String(qs.all));$$('.q').forEach(q=>{q.classList.toggle('open',qs.all);$('.qh',q).setAttribute('aria-expanded',String(qs.all));});};
+  $('#qprint').onclick=()=>{try{window.print();}catch(e){}};
+  drawQ();}
+function drawQ(){
+  const term=qs.q.trim().toLowerCase();let shown=0;
+  const html=QB.filter(g=>qs.g==='all'||g.id===qs.g).map(g=>{
+    const rows=g.items.map((it,i)=>[it,i+1]).filter(([it])=>(qs.tag==='All'||it[0]===qs.tag)&&(!term||(it[1]+' '+it[2]).toLowerCase().includes(term)));
+    if(!rows.length)return '';shown+=rows.length;
+    return `<section class="qgroup"><h2>${gtQ(g)}<small>${rows.length} ${L('of','من')} ${g.items.length}</small></h2>${rows.map(([it,n])=>`<div class="q${qs.all?' open':''}"><button class="qh" aria-expanded="${qs.all}"><span class="qno">${n}</span><span class="qt"><span class="tag">${tagLabel(it[0])}</span>${it[1]}</span><span>${ico('eye',26).replace('class="ico"','class="ico eye-on"')}${ico('eyeoff',26).replace('class="ico"','class="ico eye-off"')}</span></button><div class="qa">${it[2]}</div></div>`).join('')}</section>`;}).join('');
+  const box=$('#qlist');box.innerHTML=html||`<div class="empty">${L('No questions match. Clear the search or choose another filter.','لا توجد أسئلة مطابقة. امسح البحث أو اختر مرشّحاً آخر.')}</div>`;
+  $$('.q .qh',box).forEach(b=>b.onclick=()=>{const q=b.parentElement,o=q.classList.toggle('open');b.setAttribute('aria-expanded',String(o));});}
+
+/* ---- word bank ---- */
+const ws={g:'all',lang:'both',q:'',defs:true};
+function viewW(){
+  const total=WB.reduce((n,g)=>n+g.items.length,0);
+  const lecs=[['all',L('All lectures','كل المحاضرات'),total]].concat(WB.map(g=>[g.id,UI==='ar'?GAR.w[g.id]:short(g.title),g.items.length]));
+  app.innerHTML=`<div class="bankwrap">${sideHTML(`<label class="find">${ico('search',22)}<input id="wsearch" type="search" placeholder="${L('Search in English or Arabic','ابحث بالإنجليزية أو العربية')}" aria-label="${L('Search terms','ابحث في المفردات')}" value="${esc(ws.q)}"></label>
+  <div class="seg" role="group" aria-label="${L('Language','اللغة')}">${[['en','English'],['ar','العربية'],['both',L('Both','كلاهما')]].map(l=>`<button data-l="${l[0]}" aria-pressed="${ws.lang===l[0]}">${l[1]}</button>`).join('')}</div>
+  <span class="tog"><button class="switch sm" role="switch" aria-checked="${ws.defs}" id="wdefs" aria-label="${L('Definitions','التعريفات')}"><i></i></button>${L('Definitions','التعريفات')}</span>
+  <p class="fh">${L('Lecture','المحاضرة')}</p><div class="fl" id="wg">${lecs.map(c=>`<button class="fb" data-g="${c[0]}" aria-pressed="${ws.g===c[0]}"><span>${c[1]}</span><b>${c[2]}</b></button>`).join('')}</div>
+  <button class="reset" id="wprint">${ico('print',20)} ${L('Print / save as PDF','طباعة / حفظ PDF')}</button>`)}
+  <section class="fmain bank"><h1>${L('Word Bank','بنك المفردات')}</h1><p class="lede">${total} ${L('key terms with meanings in English and Arabic. Switch the language or hide definitions to test yourself.','مصطلحاً أساسياً بمعانيها بالإنجليزية والعربية. بدّل اللغة أو أخفِ التعريفات لاختبار نفسك.')}</p><div id="wlist"></div></section></div>`;
+  wireToggle();
+  $$('#wg .fb').forEach(b=>b.onclick=()=>{ws.g=b.dataset.g;$$('#wg .fb').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));drawW();});
+  $$('.seg button').forEach(b=>b.onclick=()=>{ws.lang=b.dataset.l;$$('.seg button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));drawW();});
+  $('#wsearch').oninput=e=>{ws.q=e.target.value;drawW();};
+  $('#wdefs').onclick=e=>{ws.defs=!ws.defs;e.currentTarget.setAttribute('aria-checked',String(ws.defs));drawW();};
+  $('#wprint').onclick=()=>{try{window.print();}catch(e){}};
+  drawW();}
+function drawW(){
+  const term=ws.q.trim().toLowerCase();
+  const html=WB.filter(g=>ws.g==='all'||g.id===ws.g).map(g=>{
+    const rows=g.items.filter(it=>!term||it.join(' ').toLowerCase().includes(term));if(!rows.length)return '';
+    return `<section class="qgroup"><h2>${gtW(g)}<small>${rows.length} ${L('terms','مصطلحاً')}</small></h2><div class="wgrid">${rows.map(it=>{
+      const en=`<div class="t">${it[0]}</div>`,ar=`<div class="t" dir="rtl" lang="ar" style="text-align:right">${it[1]}</div>`,
+      ar2=`<div class="t2" dir="rtl" lang="ar" style="text-align:right">${it[1]}</div>`,
+      dE=ws.defs?`<p class="d">${it[2]}</p>`:'',dA=ws.defs?`<p class="d" dir="rtl" lang="ar" style="text-align:right">${it[3]}</p>`:'';
+      return `<article class="w">${ws.lang==='en'?en+dE:ws.lang==='ar'?ar+dA:en+ar2+dE+dA}</article>`;}).join('')}</div></section>`;}).join('');
+  $('#wlist').innerHTML=html||`<div class="empty">${L('No terms match. Clear the search or choose another lecture.','لا توجد مصطلحات مطابقة. امسح البحث أو اختر محاضرة أخرى.')}</div>`;}
+
+/* ---- global controls ---- */
+function applyTheme(){if(SV.theme)document.documentElement.dataset.theme=SV.theme;}
+function applyUI(){const h=document.documentElement;h.classList.toggle('proj',!!SV.proj);h.classList.toggle('ui-ar',UI==='ar');
+  $('#btnLang').textContent=UI==='ar'?'EN':'ع';$('#btnLang').setAttribute('aria-label',L('Switch interface language to Arabic','تبديل لغة الواجهة إلى الإنجليزية'));
+  $('#btnProj').setAttribute('aria-pressed',String(!!SV.proj));$('#btnProj').title=L('Projector mode','وضع العرض');
+  $('#btnTheme').title=L('Light / dark','فاتح / داكن');$('#btnFull').title=L('Full screen','ملء الشاشة');}
+$('#btnTheme').onclick=()=>{const r=document.documentElement;r.dataset.theme=r.dataset.theme==='dark'?'light':'dark';SV.theme=r.dataset.theme;save();};
+$('#btnFull').onclick=()=>{try{const p=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>{});}catch(e){}};
+$('#btnProj').onclick=()=>{SV.proj=!SV.proj;save();applyUI();hh();};
+$('#btnLang').onclick=()=>{UI=UI==='ar'?'en':'ar';SV.ui=UI;save();applyUI();stopTim();render();};
+document.addEventListener('keydown',e=>{const t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='SELECT'))return;
+  if(mode==='slides'){if(e.key==='ArrowRight'){go(1);}else if(e.key==='ArrowLeft'){go(-1);}}
+  if(mode==='prac'&&PR.tool==='cards'&&FC.list.length){if(e.key==='ArrowRight'){$('#fnext').click();}else if(e.key==='ArrowLeft'){$('#fprev').click();}else if(e.key==='f'||e.key==='F'){$('#flash').click();}}
+  if(e.key==='p'||e.key==='P'){if(!e.ctrlKey&&!e.metaKey){$('#btnProj').click();}}});
+const hh=()=>document.documentElement.style.setProperty('--hh',$('.top').offsetHeight+'px');
+window.addEventListener('resize',hh);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(hh);
+applyTheme();applyUI();hh();
+render();
+})();
+</script>
+</body>
+</html>
